@@ -1,0 +1,32 @@
+{
+	"schemaVersion": 1,
+	"id": "waters_spell_mod",
+	"version": "${version}",
+	"name": "DnD Spell Mod",
+	"description": "",
+	"authors": [
+		"Watersfall"
+	],
+	"contact": {
+		"website": "https://github.com/Watersfall"
+	},
+	"license": "GPL-3.0",
+	"icon": "assets/spellmod/icon.png",
+	"environment": "*",
+	"entrypoints": {
+		"client": [
+			"net.watersfall.spellmod.client.WatersSpellModClient"
+		],
+		"main": [
+			"net.watersfall.spellmod.WatersSpellMod"
+		]
+	},
+	"mixins": [
+		"spellmod.mixins.json"
+	],
+	"depends": {
+		"fabricloader": ">=0.10.8",
+		"fabric": "*",
+		"minecraft": "1.16.4"
+	}
+}
