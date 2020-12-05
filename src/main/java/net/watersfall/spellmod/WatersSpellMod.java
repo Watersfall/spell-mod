@@ -25,6 +25,7 @@ import net.watersfall.spellmod.item.SpellbookItem;
 import net.watersfall.spellmod.spells.level0.AcidSplashSpell;
 import net.watersfall.spellmod.spells.level0.BladeWardSpell;
 import net.watersfall.spellmod.spells.level0.BoomingBladeSpell;
+import net.watersfall.spellmod.spells.level0.ChillTouchSpell;
 
 import java.awt.*;
 
@@ -37,6 +38,7 @@ public class WatersSpellMod implements ModInitializer
 	public static final EntityType<AcidSplashEntity> ACID_SPLASH_TYPE;
 	public static final StatusEffect BOOMING_BLADE_GIVE = new SpecialStatusEffect(StatusEffectType.BENEFICIAL, Color.YELLOW.hashCode());
 	public static final StatusEffect BOOMING_BLADE = new SpecialStatusEffect(StatusEffectType.HARMFUL, Color.YELLOW.hashCode());
+	public static final StatusEffect CHILL_OF_THE_GRAVE = new SpecialStatusEffect(StatusEffectType.HARMFUL, Color.BLACK.hashCode());
 
 	static
 	{
@@ -64,8 +66,10 @@ public class WatersSpellMod implements ModInitializer
 		Spells.addSpell(getId("blade_ward_spell"), new BladeWardSpell(getId("blade_ward_spell").toString()));
 		Spells.addSpell(getId("acid_splash_spell"), new AcidSplashSpell(getId("acid_splash_spell").toString()));
 		Spells.addSpell(getId("booming_blade_spell"), new BoomingBladeSpell(getId("booming_blade_spell").toString()));
+		Spells.addSpell(getId("chill_touch_spell"), new ChillTouchSpell(getId("chill_touch_spell").toString()));
 		Registry.register(Registry.STATUS_EFFECT, getId("effect_booming_blade_give"), BOOMING_BLADE_GIVE);
 		Registry.register(Registry.STATUS_EFFECT, getId("effect_booming_blade"), BOOMING_BLADE);
+		Registry.register(Registry.STATUS_EFFECT, getId("effect_chill_of_the_grave"), CHILL_OF_THE_GRAVE);
 		AttackEntityCallback.EVENT.register((player, world, hand, entity, result) -> {
 			if(entity instanceof LivingEntity)
 			{

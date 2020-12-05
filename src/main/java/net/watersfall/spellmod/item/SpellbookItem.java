@@ -2,6 +2,7 @@ package net.watersfall.spellmod.item;
 
 import net.minecraft.client.item.TooltipContext;
 import net.minecraft.entity.LivingEntity;
+import net.minecraft.entity.effect.StatusEffectInstance;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
@@ -13,6 +14,7 @@ import net.minecraft.util.Hand;
 import net.minecraft.util.TypedActionResult;
 import net.minecraft.util.UseAction;
 import net.minecraft.world.World;
+import net.watersfall.spellmod.WatersSpellMod;
 import net.watersfall.spellmod.api.Spell;
 import net.watersfall.spellmod.api.Spells;
 
@@ -55,7 +57,7 @@ public class SpellbookItem extends Item
 				{
 					tag.remove("spell");
 				}
-				stack.getTag().putString("spell", "waters_spell_mod:booming_blade_spell");
+				stack.getTag().putString("spell", "waters_spell_mod:chill_touch_spell");
 			}
 			else
 			{

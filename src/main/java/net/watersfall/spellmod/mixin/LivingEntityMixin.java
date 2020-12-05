@@ -54,4 +54,13 @@ public abstract class LivingEntityMixin extends Entity
 			}
 		}
 	}
+
+	@Inject(method = "heal", at = @At("HEAD"), cancellable = true)
+	public void chillOfTheGraveApply(float amount, CallbackInfo info)
+	{
+		if(this.hasStatusEffect(WatersSpellMod.CHILL_OF_THE_GRAVE))
+		{
+			info.cancel();
+		}
+	}
 }
