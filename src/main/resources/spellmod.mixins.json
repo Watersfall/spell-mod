@@ -4,6 +4,7 @@
 	"package": "net.watersfall.spellmod.mixin",
 	"compatibilityLevel": "JAVA_8",
 	"mixins": [
+		"LivingEntityMixin"
 	],
 	"client": [
 	],

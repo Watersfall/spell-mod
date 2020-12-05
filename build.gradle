@@ -3,6 +3,10 @@ plugins {
     id 'maven-publish'
 }
 
+minecraft {
+    accessWidener "src/main/resources/waters_spell_mod.accesswidener"
+}
+
 sourceCompatibility = JavaVersion.VERSION_1_8
 targetCompatibility = JavaVersion.VERSION_1_8
 
