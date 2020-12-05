@@ -5,7 +5,6 @@ import net.fabricmc.fabric.api.client.itemgroup.FabricItemGroupBuilder;
 import net.fabricmc.fabric.api.event.player.AttackEntityCallback;
 import net.fabricmc.fabric.api.item.v1.FabricItemSettings;
 import net.fabricmc.fabric.api.object.builder.v1.entity.FabricEntityTypeBuilder;
-import net.fabricmc.fabric.impl.registry.sync.FabricRegistry;
 import net.minecraft.entity.EntityDimensions;
 import net.minecraft.entity.EntityType;
 import net.minecraft.entity.LivingEntity;
@@ -23,9 +22,9 @@ import net.watersfall.spellmod.api.Spells;
 import net.watersfall.spellmod.effect.SpecialStatusEffect;
 import net.watersfall.spellmod.entity.AcidSplashEntity;
 import net.watersfall.spellmod.item.SpellbookItem;
-import net.watersfall.spellmod.spells.cantrip.AcidSplashSpell;
-import net.watersfall.spellmod.spells.cantrip.BladeWardSpell;
-import net.watersfall.spellmod.spells.cantrip.BoomingBladeSpell;
+import net.watersfall.spellmod.spells.level0.AcidSplashSpell;
+import net.watersfall.spellmod.spells.level0.BladeWardSpell;
+import net.watersfall.spellmod.spells.level0.BoomingBladeSpell;
 
 import java.awt.*;
 

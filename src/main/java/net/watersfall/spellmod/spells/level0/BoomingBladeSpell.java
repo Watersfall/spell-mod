@@ -1,4 +1,4 @@
-package net.watersfall.spellmod.spells.cantrip;
+package net.watersfall.spellmod.spells.level0;
 
 import net.minecraft.entity.effect.StatusEffectInstance;
 import net.minecraft.entity.player.PlayerEntity;
