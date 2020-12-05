@@ -77,7 +77,7 @@ public class SpellbookItem extends Item
 		{
 			return Spells.getSpell(stack.getTag().getString("spell")).castingTime;
 		}
-		return 0;
+		return 20;
 	}
 
 	@Override

@@ -28,6 +28,8 @@ public abstract class LivingEntityMixin extends Entity
 
 	@Shadow public abstract boolean removeStatusEffect(StatusEffect type);
 
+	@Shadow protected float lastDamageTaken;
+
 	public LivingEntityMixin(EntityType<?> type, World world)
 	{
 		super(type, world);
@@ -45,9 +47,10 @@ public abstract class LivingEntityMixin extends Entity
 		{
 			if(this.hasStatusEffect(WatersSpellMod.BOOMING_BLADE))
 			{
+				this.lastDamageTaken = 0;
 				this.damage(DamageSource.MAGIC, (int)(Math.random() * 8) + 1);
 				this.removeStatusEffect(WatersSpellMod.BOOMING_BLADE);
-				this.world.playSoundFromEntity(null, this, SoundEvents.ENTITY_GENERIC_EXPLODE, SoundCategory.PLAYERS, 1F, 1F);
+				this.world.playSoundFromEntity(null, this, SoundEvents.ENTITY_GENERIC_EXPLODE, SoundCategory.PLAYERS, 4.0F, (1.0F + (this.world.random.nextFloat() - this.world.random.nextFloat()) * 0.2F) * 0.7F);
 			}
 		}
 	}

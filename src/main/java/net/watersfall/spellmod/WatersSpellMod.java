@@ -72,6 +72,7 @@ public class WatersSpellMod implements ModInitializer
 				if(player.hasStatusEffect(BOOMING_BLADE_GIVE))
 				{
 					((LivingEntity) entity).addStatusEffect(new StatusEffectInstance(BOOMING_BLADE, 6 * 20));
+					player.removeStatusEffect(BOOMING_BLADE_GIVE);
 				}
 			}
 			return ActionResult.PASS;
