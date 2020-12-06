@@ -21,7 +21,7 @@ public class AcidSplashEntity extends ThrownProjectileSpellEntity
 
 	public AcidSplashEntity(LivingEntity user, World world)
 	{
-		super(user, world);
+		super(WatersSpellMod.ACID_SPLASH_TYPE, user, world);
 	}
 
 	@Override

@@ -13,13 +13,13 @@ public abstract class ThrownProjectileSpellEntity extends ThrownItemEntity
 		super(entityType, world);
 	}
 
-	public ThrownProjectileSpellEntity(double x, double y, double z, World world)
+	public ThrownProjectileSpellEntity(EntityType<? extends ThrownItemEntity> entityType, double x, double y, double z, World world)
 	{
-		super(WatersSpellMod.ACID_SPLASH_TYPE, x, y, z, world);
+		super(entityType, x, y, z, world);
 	}
 
-	public ThrownProjectileSpellEntity(LivingEntity livingEntity, World world)
+	public ThrownProjectileSpellEntity(EntityType<? extends ThrownItemEntity> entityType, LivingEntity livingEntity, World world)
 	{
-		super(WatersSpellMod.ACID_SPLASH_TYPE, livingEntity, world);
+		super(entityType, livingEntity, world);
 	}
 }

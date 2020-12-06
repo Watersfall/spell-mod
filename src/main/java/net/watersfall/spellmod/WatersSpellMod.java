@@ -21,6 +21,7 @@ import net.minecraft.util.registry.Registry;
 import net.watersfall.spellmod.api.Spells;
 import net.watersfall.spellmod.effect.SpecialStatusEffect;
 import net.watersfall.spellmod.entity.AcidSplashEntity;
+import net.watersfall.spellmod.entity.ChillTouchEntity;
 import net.watersfall.spellmod.item.SpellbookItem;
 import net.watersfall.spellmod.spells.level0.AcidSplashSpell;
 import net.watersfall.spellmod.spells.level0.BladeWardSpell;
@@ -36,6 +37,7 @@ public class WatersSpellMod implements ModInitializer
 	public static final ItemGroup SPELL_MOD_GROUP;
 	public static final SpellbookItem SPELLBOOK;
 	public static final EntityType<AcidSplashEntity> ACID_SPLASH_TYPE;
+	public static final EntityType<ChillTouchEntity> CHILL_TOUCH_ENTITY;
 	public static final StatusEffect BOOMING_BLADE_GIVE = new SpecialStatusEffect(StatusEffectType.BENEFICIAL, Color.YELLOW.hashCode());
 	public static final StatusEffect BOOMING_BLADE = new SpecialStatusEffect(StatusEffectType.HARMFUL, Color.YELLOW.hashCode());
 	public static final StatusEffect CHILL_OF_THE_GRAVE = new SpecialStatusEffect(StatusEffectType.HARMFUL, Color.BLACK.hashCode());
@@ -47,6 +49,14 @@ public class WatersSpellMod implements ModInitializer
 		ACID_SPLASH_TYPE = Registry.register(Registry.ENTITY_TYPE,
 				getId("acid_splash_entity"),
 				FabricEntityTypeBuilder.<AcidSplashEntity>create(SpawnGroup.MISC, AcidSplashEntity::new)
+						.dimensions(EntityDimensions.fixed(0.25F, 0.25F))
+						.trackRangeBlocks(4)
+						.trackedUpdateRate(10)
+						.build()
+				);
+		CHILL_TOUCH_ENTITY = Registry.register(Registry.ENTITY_TYPE,
+				getId("chill_touch_entity"),
+				FabricEntityTypeBuilder.<ChillTouchEntity>create(SpawnGroup.MISC, ChillTouchEntity::new)
 						.dimensions(EntityDimensions.fixed(0.25F, 0.25F))
 						.trackRangeBlocks(4)
 						.trackedUpdateRate(10)

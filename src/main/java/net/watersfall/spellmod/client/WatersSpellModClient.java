@@ -14,6 +14,7 @@ import net.minecraft.util.math.Vec3d;
 import net.minecraft.util.registry.Registry;
 import net.watersfall.spellmod.WatersSpellMod;
 import net.watersfall.spellmod.entity.AcidSplashEntity;
+import net.watersfall.spellmod.entity.ChillTouchEntity;
 import net.watersfall.spellmod.util.EntitySpawnPacket;
 
 import java.util.UUID;
@@ -53,6 +54,7 @@ public class WatersSpellModClient implements ClientModInitializer
 	public void onInitializeClient()
 	{
 		EntityRendererRegistry.INSTANCE.register(WatersSpellMod.ACID_SPLASH_TYPE, (d, c) -> new FlyingItemEntityRenderer<AcidSplashEntity>(d, c.getItemRenderer()));
+		EntityRendererRegistry.INSTANCE.register(WatersSpellMod.CHILL_TOUCH_ENTITY, (d, c) -> new FlyingItemEntityRenderer<ChillTouchEntity>(d, c.getItemRenderer()));
 		receiveEntityPacket();
 	}
 }

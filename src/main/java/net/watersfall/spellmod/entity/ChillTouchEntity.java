@@ -23,7 +23,7 @@ public class ChillTouchEntity extends ThrownProjectileSpellEntity
 
 	public ChillTouchEntity(LivingEntity user, World world)
 	{
-		super(user, world);
+		super(WatersSpellMod.CHILL_TOUCH_ENTITY, user, world);
 	}
 
 	@Override
