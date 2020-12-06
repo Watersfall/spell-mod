@@ -50,8 +50,8 @@ public class WatersSpellMod implements ModInitializer
 	{
 		SPELL_MOD_GROUP = FabricItemGroupBuilder.build(getId("spells"), () -> new ItemStack(Items.BOOK));
 		SPELLBOOK = new SpellbookItem(new FabricItemSettings().group(SPELL_MOD_GROUP));
-		BONFIRE_BLOCK = new BonfireBlock(FabricBlockSettings.of(Material.FIRE, MaterialColor.LAVA).noCollision().breakInstantly().luminance(15));
-		BONFIRE_ITEM = new BlockItem(BONFIRE_BLOCK, new FabricItemSettings().group(SPELL_MOD_GROUP));
+		BONFIRE_BLOCK = new BonfireBlock(FabricBlockSettings.of(Material.FIRE, MaterialColor.LAVA).noCollision().strength(-1.0F, 3600000.0F).luminance(15));
+		BONFIRE_ITEM = new BlockItem(BONFIRE_BLOCK, new FabricItemSettings());
 		ACID_SPLASH_TYPE = Registry.register(Registry.ENTITY_TYPE,
 				getId("acid_splash_entity"),
 				FabricEntityTypeBuilder.<AcidSplashEntity>create(SpawnGroup.MISC, AcidSplashEntity::new)

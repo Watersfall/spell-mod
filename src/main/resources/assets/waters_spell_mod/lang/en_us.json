@@ -1,5 +1,15 @@
 {
 	"item.waters_spell_mod.spellbook": "Spellbook",
 	"itemGroup.waters_spell_mod.spells": "Waters Spell Mod",
-	"spell.waters_spell_mod.blade_ward_spell": "Blade Ward"
+	"item.waters_spell_mod.blade_ward_spell": "Blade Ward",
+	"item.waters_spell_mod.acid_splash_spell": "Acid Splash",
+	"item.waters_spell_mod.booming_blade_spell": "Booming Blade",
+	"item.waters_spell_mod.chill_touch_spell": "Chill Touch",
+	"item.waters_spell_mod.create_bonfire_spell": "Create Bonfire",
+	"block.waters_spell_mod.bonfire": "Bonfire",
+	"effect.waters_spell_mod.effect_booming_blade_give": "Booming Blade (Give)",
+	"effect.waters_spell_mod.effect_booming_blade": "Booming Blade",
+	"effect.waters_spell_mod.effect_chill_of_the_grave": "Chill of the Grave",
+	"entity.waters_spell_mod.acid_splash_entity": "Acid Splash Projectile",
+	"entity.waters_spell_mod.chill_touch_entity": "Chill Touch Entity"
 }

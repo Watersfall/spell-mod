@@ -3,9 +3,12 @@ package net.watersfall.spellmod.client;
 import net.fabricmc.api.ClientModInitializer;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
+import net.fabricmc.fabric.api.blockrenderlayer.v1.BlockRenderLayerMap;
 import net.fabricmc.fabric.api.client.rendereregistry.v1.EntityRendererRegistry;
 import net.fabricmc.fabric.api.network.ClientSidePacketRegistry;
 import net.minecraft.client.MinecraftClient;
+import net.minecraft.client.render.RenderLayer;
+import net.minecraft.client.render.RenderLayers;
 import net.minecraft.client.render.entity.FlyingItemEntityRenderer;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityType;
@@ -55,6 +58,7 @@ public class WatersSpellModClient implements ClientModInitializer
 	{
 		EntityRendererRegistry.INSTANCE.register(WatersSpellMod.ACID_SPLASH_TYPE, (d, c) -> new FlyingItemEntityRenderer<AcidSplashEntity>(d, c.getItemRenderer()));
 		EntityRendererRegistry.INSTANCE.register(WatersSpellMod.CHILL_TOUCH_ENTITY, (d, c) -> new FlyingItemEntityRenderer<ChillTouchEntity>(d, c.getItemRenderer()));
+		BlockRenderLayerMap.INSTANCE.putBlock(WatersSpellMod.BONFIRE_BLOCK, RenderLayer.getCutout());
 		receiveEntityPacket();
 	}
 }

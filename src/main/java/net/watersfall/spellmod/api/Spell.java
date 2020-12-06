@@ -13,6 +13,7 @@ import net.watersfall.spellmod.WatersSpellMod;
 
 public abstract class Spell
 {
+	public final SpellItem item;
 	public final String id;
 	public final String translationKey;
 	public final int castingTime;
@@ -37,12 +38,13 @@ public abstract class Spell
 	{
 		this.id = id;
 		this.castingTime = castingTime;
-		translationKey = "spell." + id.split(":")[0] + "." + id.split(":")[1];
+		translationKey = "item." + id.split(":")[0] + "." + id.split(":")[1];
+		item = new SpellItem(new FabricItemSettings().group(WatersSpellMod.SPELL_MOD_GROUP).maxCount(1), this.castingTime);
 	}
 
 	public SpellItem getItem()
 	{
-		return new SpellItem(new FabricItemSettings().group(WatersSpellMod.SPELL_MOD_GROUP).maxCount(1), this.castingTime);
+		return item;
 	}
 
 	public abstract TypedActionResult<ItemStack> use(ItemStack stack, World world, PlayerEntity user);
