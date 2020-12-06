@@ -35,11 +35,6 @@ public abstract class LivingEntityMixin extends Entity
 		super(type, world);
 	}
 
-	private static void playSound(LivingEntity entity)
-	{
-
-	}
-
 	@Inject(method = "travel", at = @At("HEAD"))
 	public void boomingBladeApply(Vec3d movement, CallbackInfo info)
 	{

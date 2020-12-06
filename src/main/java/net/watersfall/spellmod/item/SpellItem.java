@@ -1,4 +1,4 @@
-package net.watersfall.spellmod.api;
+package net.watersfall.spellmod.item;
 
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.item.Item;

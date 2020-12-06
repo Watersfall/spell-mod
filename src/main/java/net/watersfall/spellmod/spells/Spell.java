@@ -1,4 +1,4 @@
-package net.watersfall.spellmod.api;
+package net.watersfall.spellmod.spells;
 
 import net.fabricmc.fabric.api.item.v1.FabricItemSettings;
 import net.minecraft.entity.player.PlayerEntity;
@@ -10,6 +10,7 @@ import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.RaycastContext;
 import net.minecraft.world.World;
 import net.watersfall.spellmod.WatersSpellMod;
+import net.watersfall.spellmod.item.SpellItem;
 
 public abstract class Spell
 {

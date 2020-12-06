@@ -1,7 +1,8 @@
-package net.watersfall.spellmod.api;
+package net.watersfall.spellmod.spells;
 
 import net.minecraft.util.Identifier;
 import net.minecraft.util.registry.Registry;
+import net.watersfall.spellmod.spells.Spell;
 
 import java.util.Collection;
 import java.util.HashMap;

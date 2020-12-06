@@ -6,7 +6,7 @@ import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.TypedActionResult;
 import net.minecraft.world.World;
-import net.watersfall.spellmod.api.Spell;
+import net.watersfall.spellmod.spells.Spell;
 
 public class BladeWardSpell extends Spell
 {

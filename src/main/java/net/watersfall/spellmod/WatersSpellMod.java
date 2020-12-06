@@ -22,7 +22,7 @@ import net.minecraft.item.Items;
 import net.minecraft.util.ActionResult;
 import net.minecraft.util.Identifier;
 import net.minecraft.util.registry.Registry;
-import net.watersfall.spellmod.api.Spells;
+import net.watersfall.spellmod.spells.Spells;
 import net.watersfall.spellmod.block.BonfireBlock;
 import net.watersfall.spellmod.effect.SpecialStatusEffect;
 import net.watersfall.spellmod.entity.AcidSplashEntity;

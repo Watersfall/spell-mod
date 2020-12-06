@@ -1,7 +1,6 @@
 package net.watersfall.spellmod.spells.level0;
 
 import net.minecraft.block.BlockState;
-import net.minecraft.block.Blocks;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.TypedActionResult;
@@ -9,7 +8,7 @@ import net.minecraft.util.hit.BlockHitResult;
 import net.minecraft.world.RaycastContext;
 import net.minecraft.world.World;
 import net.watersfall.spellmod.WatersSpellMod;
-import net.watersfall.spellmod.api.Spell;
+import net.watersfall.spellmod.spells.Spell;
 
 public class CreateBonfireSpell extends Spell
 {
