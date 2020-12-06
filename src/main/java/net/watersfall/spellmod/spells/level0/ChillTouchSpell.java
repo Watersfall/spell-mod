@@ -21,7 +21,6 @@ public class ChillTouchSpell extends Spell
 		if(!world.isClient)
 		{
 			ChillTouchEntity entity = new ChillTouchEntity(user, world);
-			entity.setItem(stack);
 			entity.setOwner(user);
 			entity.setProperties(user, user.pitch, user.yaw, 0.0F, 1.5F, 0F);
 			world.spawnEntity(entity);

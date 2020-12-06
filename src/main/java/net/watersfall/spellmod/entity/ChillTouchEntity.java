@@ -12,6 +12,7 @@ import net.minecraft.util.hit.EntityHitResult;
 import net.minecraft.world.World;
 import net.watersfall.spellmod.WatersSpellMod;
 import net.watersfall.spellmod.client.WatersSpellModClient;
+import net.watersfall.spellmod.spells.Spells;
 import net.watersfall.spellmod.util.EntitySpawnPacket;
 
 public class ChillTouchEntity extends ThrownProjectileSpellEntity
@@ -29,7 +30,7 @@ public class ChillTouchEntity extends ThrownProjectileSpellEntity
 	@Override
 	protected Item getDefaultItem()
 	{
-		return WatersSpellMod.SPELLBOOK;
+		return Spells.getSpell("waters_spell_mod:chill_touch_spell").item;
 	}
 
 	@Override

@@ -55,7 +55,7 @@ public class SpellbookItem extends Item
 				{
 					tag.remove("spell");
 				}
-				stack.getTag().putString("spell", "waters_spell_mod:create_bonfire_spell");
+				stack.getTag().putString("spell", "waters_spell_mod:acid_splash_spell");
 			}
 			else
 			{

@@ -10,6 +10,7 @@ import net.minecraft.util.hit.EntityHitResult;
 import net.minecraft.world.World;
 import net.watersfall.spellmod.WatersSpellMod;
 import net.watersfall.spellmod.client.WatersSpellModClient;
+import net.watersfall.spellmod.spells.Spells;
 import net.watersfall.spellmod.util.EntitySpawnPacket;
 
 public class AcidSplashEntity extends ThrownProjectileSpellEntity
@@ -27,7 +28,7 @@ public class AcidSplashEntity extends ThrownProjectileSpellEntity
 	@Override
 	protected Item getDefaultItem()
 	{
-		return WatersSpellMod.SPELLBOOK;
+		return Spells.getSpell("waters_spell_mod:acid_splash_spell").item;
 	}
 
 	@Override
