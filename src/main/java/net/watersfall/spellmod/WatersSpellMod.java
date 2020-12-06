@@ -4,7 +4,10 @@ import net.fabricmc.api.ModInitializer;
 import net.fabricmc.fabric.api.client.itemgroup.FabricItemGroupBuilder;
 import net.fabricmc.fabric.api.event.player.AttackEntityCallback;
 import net.fabricmc.fabric.api.item.v1.FabricItemSettings;
+import net.fabricmc.fabric.api.object.builder.v1.block.FabricBlockSettings;
 import net.fabricmc.fabric.api.object.builder.v1.entity.FabricEntityTypeBuilder;
+import net.minecraft.block.Material;
+import net.minecraft.block.MaterialColor;
 import net.minecraft.entity.EntityDimensions;
 import net.minecraft.entity.EntityType;
 import net.minecraft.entity.LivingEntity;
@@ -12,6 +15,7 @@ import net.minecraft.entity.SpawnGroup;
 import net.minecraft.entity.effect.StatusEffect;
 import net.minecraft.entity.effect.StatusEffectInstance;
 import net.minecraft.entity.effect.StatusEffectType;
+import net.minecraft.item.BlockItem;
 import net.minecraft.item.ItemGroup;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.Items;
@@ -19,14 +23,12 @@ import net.minecraft.util.ActionResult;
 import net.minecraft.util.Identifier;
 import net.minecraft.util.registry.Registry;
 import net.watersfall.spellmod.api.Spells;
+import net.watersfall.spellmod.block.BonfireBlock;
 import net.watersfall.spellmod.effect.SpecialStatusEffect;
 import net.watersfall.spellmod.entity.AcidSplashEntity;
 import net.watersfall.spellmod.entity.ChillTouchEntity;
 import net.watersfall.spellmod.item.SpellbookItem;
-import net.watersfall.spellmod.spells.level0.AcidSplashSpell;
-import net.watersfall.spellmod.spells.level0.BladeWardSpell;
-import net.watersfall.spellmod.spells.level0.BoomingBladeSpell;
-import net.watersfall.spellmod.spells.level0.ChillTouchSpell;
+import net.watersfall.spellmod.spells.level0.*;
 
 import java.awt.*;
 
@@ -36,6 +38,8 @@ public class WatersSpellMod implements ModInitializer
 
 	public static final ItemGroup SPELL_MOD_GROUP;
 	public static final SpellbookItem SPELLBOOK;
+	public static final BonfireBlock BONFIRE_BLOCK;
+	public static final BlockItem BONFIRE_ITEM;
 	public static final EntityType<AcidSplashEntity> ACID_SPLASH_TYPE;
 	public static final EntityType<ChillTouchEntity> CHILL_TOUCH_ENTITY;
 	public static final StatusEffect BOOMING_BLADE_GIVE = new SpecialStatusEffect(StatusEffectType.BENEFICIAL, Color.YELLOW.hashCode());
@@ -46,6 +50,8 @@ public class WatersSpellMod implements ModInitializer
 	{
 		SPELL_MOD_GROUP = FabricItemGroupBuilder.build(getId("spells"), () -> new ItemStack(Items.BOOK));
 		SPELLBOOK = new SpellbookItem(new FabricItemSettings().group(SPELL_MOD_GROUP));
+		BONFIRE_BLOCK = new BonfireBlock(FabricBlockSettings.of(Material.FIRE, MaterialColor.LAVA).noCollision().breakInstantly().luminance(15));
+		BONFIRE_ITEM = new BlockItem(BONFIRE_BLOCK, new FabricItemSettings().group(SPELL_MOD_GROUP));
 		ACID_SPLASH_TYPE = Registry.register(Registry.ENTITY_TYPE,
 				getId("acid_splash_entity"),
 				FabricEntityTypeBuilder.<AcidSplashEntity>create(SpawnGroup.MISC, AcidSplashEntity::new)
@@ -73,10 +79,13 @@ public class WatersSpellMod implements ModInitializer
 	public void onInitialize()
 	{
 		Registry.register(Registry.ITEM, getId("spellbook"), SPELLBOOK);
+		Registry.register(Registry.BLOCK, getId("bonfire"), BONFIRE_BLOCK);
+		Registry.register(Registry.ITEM, getId("bonfire"), BONFIRE_ITEM);
 		Spells.addSpell(getId("blade_ward_spell"), new BladeWardSpell(getId("blade_ward_spell").toString()));
 		Spells.addSpell(getId("acid_splash_spell"), new AcidSplashSpell(getId("acid_splash_spell").toString()));
 		Spells.addSpell(getId("booming_blade_spell"), new BoomingBladeSpell(getId("booming_blade_spell").toString()));
 		Spells.addSpell(getId("chill_touch_spell"), new ChillTouchSpell(getId("chill_touch_spell").toString()));
+		Spells.addSpell(getId("create_bonfire_spell"), new CreateBonfireSpell(getId("create_bonfire_spell").toString()));
 		Registry.register(Registry.STATUS_EFFECT, getId("effect_booming_blade_give"), BOOMING_BLADE_GIVE);
 		Registry.register(Registry.STATUS_EFFECT, getId("effect_booming_blade"), BOOMING_BLADE);
 		Registry.register(Registry.STATUS_EFFECT, getId("effect_chill_of_the_grave"), CHILL_OF_THE_GRAVE);
