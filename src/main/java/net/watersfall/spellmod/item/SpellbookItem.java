@@ -22,7 +22,6 @@ import net.watersfall.spellmod.constants.TagKeys;
 import net.watersfall.spellmod.spells.Spell;
 import net.watersfall.spellmod.spells.SpellClass;
 import net.watersfall.spellmod.spells.Spells;
-import org.lwjgl.glfw.GLFW;
 
 import java.util.List;
 
@@ -41,6 +40,15 @@ public class SpellbookItem extends Item
 	public static void setLevel(ItemStack stack, int level)
 	{
 		stack.getOrCreateTag().putInt(TagKeys.LEVEL, level);
+	}
+
+	public static void setSpellSlots(ItemStack stack)
+	{
+		CompoundTag tag = stack.getOrCreateTag();
+		for(int i = 1; i <= 9; i++)
+		{
+			tag.putInt(TagKeys.getSpellSlotTag(i), ((SpellbookItem)stack.getItem()).spellClass.levels[getLevel(stack) - 1][i - 1]);
+		}
 	}
 
 	public SpellbookItem(Settings settings, SpellClass spellClass)
@@ -194,15 +202,6 @@ public class SpellbookItem extends Item
 			{
 				setSpellSlots(stack);
 			}
-		}
-	}
-
-	private void setSpellSlots(ItemStack stack)
-	{
-		CompoundTag tag = stack.getOrCreateTag();
-		for(int i = 1; i <= 9; i++)
-		{
-			tag.putInt(TagKeys.getSpellSlotTag(i), this.spellClass.levels[getLevel(stack) - 1][i - 1]);
 		}
 	}
 }
