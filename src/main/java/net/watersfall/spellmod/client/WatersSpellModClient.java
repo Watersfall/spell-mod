@@ -6,6 +6,7 @@ import net.fabricmc.api.Environment;
 import net.fabricmc.fabric.api.blockrenderlayer.v1.BlockRenderLayerMap;
 import net.fabricmc.fabric.api.client.rendereregistry.v1.BlockEntityRendererRegistry;
 import net.fabricmc.fabric.api.client.rendereregistry.v1.EntityRendererRegistry;
+import net.fabricmc.fabric.api.client.screenhandler.v1.ScreenRegistry;
 import net.fabricmc.fabric.api.network.ClientSidePacketRegistry;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.render.RenderLayer;
@@ -17,6 +18,7 @@ import net.minecraft.util.Identifier;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.util.registry.Registry;
 import net.watersfall.spellmod.WatersSpellMod;
+import net.watersfall.spellmod.client.gui.SpellbookGui;
 import net.watersfall.spellmod.client.rendering.PedestalBlockEntityRenderer;
 import net.watersfall.spellmod.entity.AcidSplashEntity;
 import net.watersfall.spellmod.entity.ChillTouchEntity;
@@ -62,6 +64,7 @@ public class WatersSpellModClient implements ClientModInitializer
 		EntityRendererRegistry.INSTANCE.register(WatersSpellMod.CHILL_TOUCH_ENTITY, (d, c) -> new FlyingItemEntityRenderer<ChillTouchEntity>(d, c.getItemRenderer()));
 		BlockRenderLayerMap.INSTANCE.putBlock(WatersSpellMod.BONFIRE_BLOCK, RenderLayer.getCutout());
 		BlockEntityRendererRegistry.INSTANCE.register(WatersSpellMod.PEDESTAL_BLOCK_ENTITY, PedestalBlockEntityRenderer::new);
+		ScreenRegistry.register(WatersSpellMod.SPELLBOOK_SCREEN_HANDLER, SpellbookGui::new);
 		receiveEntityPacket();
 	}
 }

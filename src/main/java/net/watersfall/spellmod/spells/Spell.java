@@ -35,12 +35,12 @@ public abstract class Spell
 		return world.raycast(new RaycastContext(vec3d, vec3d2, RaycastContext.ShapeType.OUTLINE, fluidHandling, player));
 	}
 
-	public Spell(String id, int castingTime)
+	public Spell(String id, int castingTime, int level)
 	{
 		this.id = id;
 		this.castingTime = castingTime;
 		translationKey = "item." + id.split(":")[0] + "." + id.split(":")[1];
-		item = new SpellItem(new FabricItemSettings().group(WatersSpellMod.SPELL_MOD_GROUP).maxCount(1), this.castingTime);
+		item = new SpellItem(new FabricItemSettings().group(WatersSpellMod.SPELL_MOD_GROUP).maxCount(1), this.castingTime, level);
 	}
 
 	public SpellItem getItem()

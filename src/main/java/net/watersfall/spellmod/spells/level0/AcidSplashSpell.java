@@ -11,7 +11,7 @@ public class AcidSplashSpell extends Spell
 {
 	public AcidSplashSpell(String id)
 	{
-		super(id, 20);
+		super(id, 20, 0);
 	}
 
 	@Override

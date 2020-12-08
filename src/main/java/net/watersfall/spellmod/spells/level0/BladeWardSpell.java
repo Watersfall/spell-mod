@@ -12,7 +12,7 @@ public class BladeWardSpell extends Spell
 {
 	public BladeWardSpell(String id)
 	{
-		super(id, 20);
+		super(id, 20, 0);
 	}
 
 	@Override

@@ -1,14 +1,19 @@
 package net.watersfall.spellmod.item;
 
+import net.fabricmc.fabric.api.screenhandler.v1.ExtendedScreenHandlerFactory;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.item.TooltipContext;
 import net.minecraft.client.util.InputUtil;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.entity.player.PlayerInventory;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.CompoundTag;
+import net.minecraft.network.PacketByteBuf;
+import net.minecraft.screen.ScreenHandler;
+import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.text.LiteralText;
 import net.minecraft.text.Text;
 import net.minecraft.text.TranslatableText;
@@ -19,6 +24,8 @@ import net.minecraft.util.UseAction;
 import net.minecraft.world.World;
 import net.watersfall.spellmod.constants.LangKeys;
 import net.watersfall.spellmod.constants.TagKeys;
+import net.watersfall.spellmod.inventory.SpellbookInventory;
+import net.watersfall.spellmod.screen.SpellbookScreenHandler;
 import net.watersfall.spellmod.spells.Spell;
 import net.watersfall.spellmod.spells.SpellClass;
 import net.watersfall.spellmod.spells.Spells;
@@ -45,10 +52,25 @@ public class SpellbookItem extends Item
 	public static void setSpellSlots(ItemStack stack)
 	{
 		CompoundTag tag = stack.getOrCreateTag();
-		for(int i = 1; i <= 9; i++)
+		SpellClass spellClass = ((SpellbookItem)stack.getItem()).spellClass;
+		tag.putIntArray(TagKeys.SPELL_SLOTS, spellClass.levels[getLevel(stack)]);
+	}
+
+	public static int getSpellSlots(ItemStack stack, int level)
+	{
+		if(stack.getTag() != null)
 		{
-			tag.putInt(TagKeys.getSpellSlotTag(i), ((SpellbookItem)stack.getItem()).spellClass.levels[getLevel(stack) - 1][i - 1]);
+			return stack.getTag().getIntArray(TagKeys.SPELL_SLOTS)[level];
 		}
+		return 0;
+	}
+
+	public static void subtractSpellSlot(ItemStack stack, int level)
+	{
+		CompoundTag tag = stack.getTag();
+		int[] array = tag.getIntArray(TagKeys.SPELL_SLOTS);
+		array[level] = array[level] - 1;
+		tag.putIntArray(TagKeys.SPELL_SLOTS, array);
 	}
 
 	public SpellbookItem(Settings settings, SpellClass spellClass)
@@ -63,23 +85,37 @@ public class SpellbookItem extends Item
 		ItemStack stack = user.getStackInHand(hand);
 		if(stack.getTag() == null)
 		{
-			user.setStackInHand(hand, this.getDefaultStack().copy());
+			stack = this.getDefaultStack().copy();
+			stack.getTag().putString(TagKeys.SPELL_LIST, "waters_spell_mod:acid_splash_spell;waters_spell_mod:chill_touch_spell");
+			user.setStackInHand(hand, stack);
 			return TypedActionResult.success(user.getStackInHand(hand), world.isClient);
 		}
 		else
 		{
-			if(getLevel(stack) < 20)
+			if(user.isSneaking())
 			{
-				setLevel(stack, getLevel(stack) + 1);
-				setSpellSlots(stack);
+				user.openHandledScreen(createScreenHandlerFactory(stack));
+				return TypedActionResult.success(stack);
 			}
-			if(stack.getOrCreateTag().contains(TagKeys.ACTIVE_SPELL))
+			else if(stack.getOrCreateTag().contains(TagKeys.ACTIVE_SPELL))
 			{
 				float f = user.getAttackCooldownProgress(0F);
 				if(f >= 1.0F)
 				{
-					user.setCurrentHand(hand);
-					return TypedActionResult.consume(stack);
+					Spell spell = Spells.getSpell(stack.getTag().getString(TagKeys.ACTIVE_SPELL));
+					if(spell.item.level > 0)
+					{
+						if(getSpellSlots(stack, spell.item.level - 1) > 0)
+						{
+							user.setCurrentHand(hand);
+							return TypedActionResult.consume(stack);
+						}
+					}
+					else
+					{
+						user.setCurrentHand(hand);
+						return TypedActionResult.consume(stack);
+					}
 				}
 			}
 		}
@@ -91,35 +127,19 @@ public class SpellbookItem extends Item
 	{
 		if(user instanceof PlayerEntity)
 		{
-			if(user.isSneaking())
+			if(stack.getTag() != null && stack.getTag().contains(TagKeys.ACTIVE_SPELL))
 			{
-				//Open GUI
-				//But for now this will work for testing
-				if(stack.getTag() == null)
+				Spell spell = Spells.getSpell(stack.getTag().getString(TagKeys.ACTIVE_SPELL));
+				if(spell != null)
 				{
-					stack.setTag(new CompoundTag());
-				}
-				CompoundTag tag = stack.getTag();
-				if(tag != null && tag.contains(TagKeys.ACTIVE_SPELL))
-				{
-					tag.remove(TagKeys.ACTIVE_SPELL);
-				}
-				stack.getTag().putString(TagKeys.ACTIVE_SPELL, "waters_spell_mod:acid_splash_spell");
-				for(int i = 1; i <= 9; i++)
-				{
-					tag.putInt(TagKeys.getSpellSlotTag(i), this.spellClass.levels[getLevel(stack) - 1][i - 1]);
-				}
-			}
-			else
-			{
-				if(stack.getTag() != null && stack.getTag().contains(TagKeys.ACTIVE_SPELL))
-				{
-					if(stack.getTag().getInt("level_1_spell_slots") > 0)
+					if(spell.item.level <= 0 || getSpellSlots(stack, spell.item.level - 1) > 0)
 					{
-						Spell spell = Spells.getSpell(stack.getTag().getString("spell"));
 						((PlayerEntity) user).getItemCooldownManager().set(stack.getItem(), spell.castingTime);
 						spell.use(stack, world, (PlayerEntity) user);
-						stack.getTag().putInt("level_1_spell_slots", stack.getTag().getInt("level_1_spell_slots") - 1);
+						if(spell.item.level > 0)
+						{
+							subtractSpellSlot(stack, spell.item.level - 1);
+						}
 					}
 				}
 			}
@@ -134,7 +154,7 @@ public class SpellbookItem extends Item
 		setLevel(stack, 1);
 		for(int i = 1; i <= 9; i++)
 		{
-			stack.getOrCreateTag().putInt(TagKeys.getSpellSlotTag(i), this.spellClass.levels[getLevel(stack) - 1][i - 1]);
+			setSpellSlots(stack);
 		}
 		return stack;
 	}
@@ -145,7 +165,7 @@ public class SpellbookItem extends Item
 		super.onCraft(stack, world, player);
 		for(int i = 1; i <= 9; i++)
 		{
-			stack.getOrCreateTag().putInt(TagKeys.getSpellSlotTag(i), this.spellClass.levels[getLevel(stack) - 1][i - 1]);
+			setSpellSlots(stack);
 		}
 	}
 
@@ -184,7 +204,7 @@ public class SpellbookItem extends Item
 					{
 						tooltip.add(new LiteralText(" - ")
 								.append(new TranslatableText(LangKeys.getLeveledSpellSlot(i)))
-								.append(": " + stack.getTag().getInt(TagKeys.getSpellSlotTag(i)))
+								.append(": " + getSpellSlots(stack, i - 1))
 								.formatted(Formatting.GRAY, Formatting.ITALIC));
 					}
 				}
@@ -203,5 +223,29 @@ public class SpellbookItem extends Item
 				setSpellSlots(stack);
 			}
 		}
+	}
+
+	private ExtendedScreenHandlerFactory createScreenHandlerFactory(ItemStack stack)
+	{
+		return new ExtendedScreenHandlerFactory()
+		{
+			@Override
+			public ScreenHandler createMenu(int syncId, PlayerInventory inventory, PlayerEntity player)
+			{
+				return new SpellbookScreenHandler(syncId, inventory, new SpellbookInventory(stack));
+			}
+
+			@Override
+			public Text getDisplayName()
+			{
+				return stack.getName();
+			}
+
+			@Override
+			public void writeScreenOpeningData(ServerPlayerEntity player, PacketByteBuf buf)
+			{
+				buf.writeItemStack(stack);
+			}
+		};
 	}
 }
