@@ -85,7 +85,7 @@ public class PedestalBlockEntity extends BlockEntity implements BlockEntityClien
 			if(ticks >= 100)
 			{
 				ticks = 0;
-				if(this.stack != ItemStack.EMPTY)
+				if(!this.stack.isEmpty())
 				{
 					List<PlayerEntity> entities = this.world.getEntitiesByType(EntityType.PLAYER, new Box(this.pos).expand(5), (entity) -> entity.experienceLevel >= SpellbookItem.getLevel(this.stack) * 2);
 					if(entities.size() > 0)
