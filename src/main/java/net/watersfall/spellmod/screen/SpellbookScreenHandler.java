@@ -108,11 +108,14 @@ public class SpellbookScreenHandler extends ScreenHandler
 			if(stack.getItem() instanceof SpellItem)
 			{
 				SpellItem item = (SpellItem) stack.getItem();
-				if(item.level <= 0 && this.level <= 0)
+				if(!((SpellbookInventory)inventory).contains(item))
 				{
-					return true;
+					if(item.level <= 0 && this.level <= 0)
+					{
+						return true;
+					}
+					else return item.level > 0 && this.level > 0;
 				}
-				else return item.level > 0 && this.level > 0;
 			}
 			return false;
 		}

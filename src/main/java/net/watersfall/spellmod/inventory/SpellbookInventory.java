@@ -3,6 +3,7 @@ package net.watersfall.spellmod.inventory;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.inventory.Inventories;
 import net.minecraft.inventory.Inventory;
+import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.util.collection.DefaultedList;
@@ -90,6 +91,11 @@ public class SpellbookInventory implements Inventory
 	public void clear()
 	{
 
+	}
+
+	public boolean contains(Item item)
+	{
+		return this.contents.stream().anyMatch((stack) -> stack.getItem() == item);
 	}
 
 	public ItemStack getStack()
