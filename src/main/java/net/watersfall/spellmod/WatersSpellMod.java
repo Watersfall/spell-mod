@@ -18,6 +18,7 @@ import net.minecraft.entity.SpawnGroup;
 import net.minecraft.entity.effect.StatusEffect;
 import net.minecraft.entity.effect.StatusEffectInstance;
 import net.minecraft.entity.effect.StatusEffectType;
+import net.minecraft.entity.mob.MobEntity;
 import net.minecraft.item.*;
 import net.minecraft.screen.ScreenHandlerType;
 import net.minecraft.util.ActionResult;
@@ -25,6 +26,8 @@ import net.minecraft.util.Identifier;
 import net.minecraft.util.registry.Registry;
 import net.watersfall.spellmod.block.PedestalBlock;
 import net.watersfall.spellmod.block.entity.PedestalBlockEntity;
+import net.watersfall.spellmod.effect.FriendshipEffect;
+import net.watersfall.spellmod.entity.AnimalFriendshipEntity;
 import net.watersfall.spellmod.screen.SpellbookScreenHandler;
 import net.watersfall.spellmod.spells.SpellClass;
 import net.watersfall.spellmod.spells.Spells;
@@ -34,6 +37,7 @@ import net.watersfall.spellmod.entity.AcidSplashEntity;
 import net.watersfall.spellmod.entity.ChillTouchEntity;
 import net.watersfall.spellmod.item.SpellbookItem;
 import net.watersfall.spellmod.spells.level0.*;
+import net.watersfall.spellmod.spells.level1.AnimalFriendshipSpell;
 
 import java.awt.*;
 
@@ -57,9 +61,11 @@ public class WatersSpellMod implements ModInitializer
 	public static final BlockItem BONFIRE_ITEM;
 	public static final EntityType<AcidSplashEntity> ACID_SPLASH_TYPE;
 	public static final EntityType<ChillTouchEntity> CHILL_TOUCH_ENTITY;
+	public static final EntityType<AnimalFriendshipEntity> ANIMAL_FRIENDSHIP_ENTITY;
 	public static final StatusEffect BOOMING_BLADE_GIVE = new SpecialStatusEffect(StatusEffectType.BENEFICIAL, Color.YELLOW.hashCode());
 	public static final StatusEffect BOOMING_BLADE = new SpecialStatusEffect(StatusEffectType.HARMFUL, Color.YELLOW.hashCode());
 	public static final StatusEffect CHILL_OF_THE_GRAVE = new SpecialStatusEffect(StatusEffectType.HARMFUL, Color.BLACK.hashCode());
+	public static final StatusEffect FRIENDSHIP_EFFECT = new FriendshipEffect(StatusEffectType.HARMFUL, Color.RED.hashCode());
 	public static final ScreenHandlerType<SpellbookScreenHandler> SPELLBOOK_SCREEN_HANDLER;
 
 	static
@@ -91,6 +97,14 @@ public class WatersSpellMod implements ModInitializer
 						.trackedUpdateRate(10)
 						.build()
 				);
+		ANIMAL_FRIENDSHIP_ENTITY = Registry.register(Registry.ENTITY_TYPE,
+				getId("animal_friendship_entity"),
+				FabricEntityTypeBuilder.<AnimalFriendshipEntity>create(SpawnGroup.MISC, AnimalFriendshipEntity::new)
+						.dimensions(EntityDimensions.fixed(0.25F, 0.25F))
+						.trackRangeBlocks(4)
+						.trackedUpdateRate(10)
+						.build()
+		);
 		PEDESTAL_BLOCK = new PedestalBlock(AbstractBlock.Settings.of(Material.STONE));
 		PEDESTAL_ITEM = new BlockItem(PEDESTAL_BLOCK, new FabricItemSettings().group(SPELL_MOD_GROUP));
 		PEDESTAL_BLOCK_ENTITY = Registry.register(Registry.BLOCK_ENTITY_TYPE, getId("pedestal_entity"), BlockEntityType.Builder.create(PedestalBlockEntity::new, PEDESTAL_BLOCK).build(null));
@@ -125,9 +139,11 @@ public class WatersSpellMod implements ModInitializer
 		Spells.addSpell(getId("booming_blade_spell"), new BoomingBladeSpell(getId("booming_blade_spell").toString()));
 		Spells.addSpell(getId("chill_touch_spell"), new ChillTouchSpell(getId("chill_touch_spell").toString()));
 		Spells.addSpell(getId("create_bonfire_spell"), new CreateBonfireSpell(getId("create_bonfire_spell").toString()));
+		Spells.addSpell(getId("animal_friendship_spell"), new AnimalFriendshipSpell(getId("animal_friendship_spell").toString()));
 		Registry.register(Registry.STATUS_EFFECT, getId("effect_booming_blade_give"), BOOMING_BLADE_GIVE);
 		Registry.register(Registry.STATUS_EFFECT, getId("effect_booming_blade"), BOOMING_BLADE);
 		Registry.register(Registry.STATUS_EFFECT, getId("effect_chill_of_the_grave"), CHILL_OF_THE_GRAVE);
+		Registry.register(Registry.STATUS_EFFECT, getId("effect_friendship"), FRIENDSHIP_EFFECT);
 		AttackEntityCallback.EVENT.register((player, world, hand, entity, result) -> {
 			if(entity instanceof LivingEntity)
 			{
