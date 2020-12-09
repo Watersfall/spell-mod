@@ -1,5 +1,6 @@
 package net.watersfall.spellmod.screen;
 
+import com.mojang.datafixers.util.Pair;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.player.PlayerInventory;
 import net.minecraft.inventory.Inventory;
@@ -8,6 +9,7 @@ import net.minecraft.network.PacketByteBuf;
 import net.minecraft.screen.ScreenHandler;
 import net.minecraft.screen.slot.Slot;
 import net.minecraft.screen.slot.SlotActionType;
+import net.minecraft.util.Identifier;
 import net.minecraft.util.registry.Registry;
 import net.watersfall.spellmod.WatersSpellMod;
 import net.watersfall.spellmod.constants.TagKeys;
@@ -29,7 +31,7 @@ public class SpellbookScreenHandler extends ScreenHandler
 	{
 		super(WatersSpellMod.SPELLBOOK_SCREEN_HANDLER, syncId);
 		this.inventory = (SpellbookInventory) inventory;
-
+		int cantrips = ((SpellbookItem)this.inventory.getStack().getItem()).spellClass.knownCantrips[SpellbookItem.getLevel(this.inventory.getStack())];
 		int m;
 		int l;
 		for (m = 0; m < 3; ++m)
@@ -38,7 +40,7 @@ public class SpellbookScreenHandler extends ScreenHandler
 			{
 				if(this.inventory.size() > l + m * 9)
 				{
-					this.addSlot(new SpellSlot(inventory, l + m * 9, 8 + l * 18, 18 + m * 18, SpellClass.WIZARD, 0));
+					this.addSlot(new SpellSlot(inventory, l + m * 9, 8 + l * 18, 18 + m * 18, SpellClass.WIZARD, cantrips > l + m * 9 ? 0 : 1));
 				}
 			}
 		}
@@ -77,7 +79,7 @@ public class SpellbookScreenHandler extends ScreenHandler
 			{
 				if(this.inventory.getStack(slotId) != ItemStack.EMPTY)
 				{
-					((SpellbookInventory)this.inventory).getStack().getTag().putString(TagKeys.ACTIVE_SPELL, Registry.ITEM.getId(this.inventory.getStack(slotId).getItem()).toString());
+					this.inventory.getStack().getTag().putString(TagKeys.ACTIVE_SPELL, Registry.ITEM.getId(this.inventory.getStack(slotId).getItem()).toString());
 				}
 			}
 		}
@@ -86,6 +88,10 @@ public class SpellbookScreenHandler extends ScreenHandler
 
 	static class SpellSlot extends Slot
 	{
+		public static final Identifier BLOCK_ATLAS_TEXTURE = new Identifier("textures/atlas/blocks.png");
+		public static final Identifier C_TEXTURE = WatersSpellMod.getId("item/c");
+		public static final Identifier S_TEXTURE = WatersSpellMod.getId("item/s");
+
 		public final SpellClass spellClass;
 		public final int level;
 
@@ -99,13 +105,28 @@ public class SpellbookScreenHandler extends ScreenHandler
 		@Override
 		public boolean canInsert(ItemStack stack)
 		{
-			return stack.getItem() instanceof SpellItem;
+			if(stack.getItem() instanceof SpellItem)
+			{
+				SpellItem item = (SpellItem) stack.getItem();
+				if(item.level <= 0 && this.level <= 0)
+				{
+					return true;
+				}
+				else return item.level > 0 && this.level > 0;
+			}
+			return false;
 		}
 
 		@Override
 		public boolean canTakeItems(PlayerEntity playerEntity)
 		{
 			return false;
+		}
+
+		@Override
+		public Pair<Identifier, Identifier> getBackgroundSprite()
+		{
+			return level == 0 ? Pair.of(BLOCK_ATLAS_TEXTURE, C_TEXTURE) : Pair.of(BLOCK_ATLAS_TEXTURE, S_TEXTURE);
 		}
 	}
 }

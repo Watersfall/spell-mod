@@ -19,7 +19,7 @@ public class SpellbookInventory implements Inventory
 	{
 		this.stack = stack;
 		SpellClass spellClass = ((SpellbookItem)stack.getItem()).spellClass;
-		int count = spellClass.knownSpells[stack.getTag().getInt(TagKeys.LEVEL) - 1] + spellClass.knownSpells[stack.getTag().getInt(TagKeys.LEVEL) - 1];
+		int count = spellClass.knownCantrips[stack.getTag().getInt(TagKeys.LEVEL) - 1] + spellClass.knownSpells[stack.getTag().getInt(TagKeys.LEVEL) - 1];
 		contents = DefaultedList.ofSize(count, ItemStack.EMPTY);
 		CompoundTag tag = stack.getSubTag(TagKeys.SPELL_LIST);
 		if (tag != null) {

@@ -118,6 +118,8 @@ public class WatersSpellMod implements ModInitializer
 		Registry.register(Registry.BLOCK, getId("pedestal"), PEDESTAL_BLOCK);
 		Registry.register(Registry.ITEM, getId("bonfire"), BONFIRE_ITEM);
 		Registry.register(Registry.ITEM, getId("pedestal"), PEDESTAL_ITEM);
+		Registry.register(Registry.ITEM, getId("c"), new Item(new FabricItemSettings()));
+		Registry.register(Registry.ITEM, getId("s"), new Item(new FabricItemSettings()));
 		Spells.addSpell(getId("blade_ward_spell"), new BladeWardSpell(getId("blade_ward_spell").toString()));
 		Spells.addSpell(getId("acid_splash_spell"), new AcidSplashSpell(getId("acid_splash_spell").toString()));
 		Spells.addSpell(getId("booming_blade_spell"), new BoomingBladeSpell(getId("booming_blade_spell").toString()));
