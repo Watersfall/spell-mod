@@ -3,6 +3,12 @@ plugins {
     id 'maven-publish'
 }
 
+repositories {
+    flatDir {
+        dirs 'libs'
+    }
+}
+
 minecraft {
     accessWidener "src/main/resources/waters_spell_mod.accesswidener"
 }

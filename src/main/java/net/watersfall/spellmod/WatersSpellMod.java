@@ -18,7 +18,6 @@ import net.minecraft.entity.SpawnGroup;
 import net.minecraft.entity.effect.StatusEffect;
 import net.minecraft.entity.effect.StatusEffectInstance;
 import net.minecraft.entity.effect.StatusEffectType;
-import net.minecraft.entity.mob.MobEntity;
 import net.minecraft.item.*;
 import net.minecraft.screen.ScreenHandlerType;
 import net.minecraft.util.ActionResult;
@@ -26,6 +25,7 @@ import net.minecraft.util.Identifier;
 import net.minecraft.util.registry.Registry;
 import net.watersfall.spellmod.block.PedestalBlock;
 import net.watersfall.spellmod.block.entity.PedestalBlockEntity;
+import net.watersfall.spellmod.effect.ArmorOfAgathysEffect;
 import net.watersfall.spellmod.effect.FriendshipEffect;
 import net.watersfall.spellmod.entity.AnimalFriendshipEntity;
 import net.watersfall.spellmod.screen.SpellbookScreenHandler;
@@ -38,6 +38,7 @@ import net.watersfall.spellmod.entity.ChillTouchEntity;
 import net.watersfall.spellmod.item.SpellbookItem;
 import net.watersfall.spellmod.spells.level0.*;
 import net.watersfall.spellmod.spells.level1.AnimalFriendshipSpell;
+import net.watersfall.spellmod.spells.level1.ArmorOfAgathysSpell;
 
 import java.awt.*;
 
@@ -66,6 +67,7 @@ public class WatersSpellMod implements ModInitializer
 	public static final StatusEffect BOOMING_BLADE = new SpecialStatusEffect(StatusEffectType.HARMFUL, Color.YELLOW.hashCode());
 	public static final StatusEffect CHILL_OF_THE_GRAVE = new SpecialStatusEffect(StatusEffectType.HARMFUL, Color.BLACK.hashCode());
 	public static final StatusEffect FRIENDSHIP_EFFECT = new FriendshipEffect(StatusEffectType.HARMFUL, Color.RED.hashCode());
+	public static final StatusEffect ARMOR_OF_AGATHYS_EFFECT = new ArmorOfAgathysEffect();
 	public static final ScreenHandlerType<SpellbookScreenHandler> SPELLBOOK_SCREEN_HANDLER;
 
 	static
@@ -140,10 +142,12 @@ public class WatersSpellMod implements ModInitializer
 		Spells.addSpell(getId("chill_touch_spell"), new ChillTouchSpell(getId("chill_touch_spell").toString()));
 		Spells.addSpell(getId("create_bonfire_spell"), new CreateBonfireSpell(getId("create_bonfire_spell").toString()));
 		Spells.addSpell(getId("animal_friendship_spell"), new AnimalFriendshipSpell(getId("animal_friendship_spell").toString()));
+		Spells.addSpell(getId("armor_of_agathys_spell"), new ArmorOfAgathysSpell(getId("armor_of_agathys_spell").toString()));
 		Registry.register(Registry.STATUS_EFFECT, getId("effect_booming_blade_give"), BOOMING_BLADE_GIVE);
 		Registry.register(Registry.STATUS_EFFECT, getId("effect_booming_blade"), BOOMING_BLADE);
 		Registry.register(Registry.STATUS_EFFECT, getId("effect_chill_of_the_grave"), CHILL_OF_THE_GRAVE);
 		Registry.register(Registry.STATUS_EFFECT, getId("effect_friendship"), FRIENDSHIP_EFFECT);
+		Registry.register(Registry.STATUS_EFFECT, getId("effect_armor_of_agathys"), ARMOR_OF_AGATHYS_EFFECT);
 		AttackEntityCallback.EVENT.register((player, world, hand, entity, result) -> {
 			if(entity instanceof LivingEntity)
 			{
