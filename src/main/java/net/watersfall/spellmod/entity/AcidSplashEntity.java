@@ -34,7 +34,6 @@ public class AcidSplashEntity extends ThrownProjectileSpellEntity
 	@Override
 	protected void onEntityHit(EntityHitResult entityHitResult)
 	{
-		super.onEntityHit(entityHitResult);
 		if(entityHitResult.getEntity() instanceof LivingEntity)
 		{
 			int damage = (int)(Math.random() * 6) + 1;
@@ -42,24 +41,6 @@ public class AcidSplashEntity extends ThrownProjectileSpellEntity
 			entity.damage(DamageSource.MAGIC, damage);
 			this.destroy();
 		}
-	}
-
-	@Override
-	protected void onBlockHit(BlockHitResult blockHitResult)
-	{
-		this.destroy();
-	}
-
-	@Override
-	public void tick()
-	{
-		super.tick();
-		//Eventually max range stuff
-	}
-
-	@Override
-	public Packet<?> createSpawnPacket()
-	{
-		return EntitySpawnPacket.create(this, WatersSpellModClient.PACKET_ID);
+		super.onEntityHit(entityHitResult);
 	}
 }

@@ -3,19 +3,13 @@ package net.watersfall.spellmod.entity;
 import net.minecraft.entity.EntityType;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.damage.DamageSource;
-import net.minecraft.entity.effect.StatusEffectInstance;
-import net.minecraft.entity.mob.MobEntity;
 import net.minecraft.entity.projectile.thrown.ThrownItemEntity;
 import net.minecraft.item.Item;
-import net.minecraft.network.Packet;
-import net.minecraft.util.hit.BlockHitResult;
 import net.minecraft.util.hit.EntityHitResult;
 import net.minecraft.world.World;
 import net.watersfall.spellmod.WatersSpellMod;
-import net.watersfall.spellmod.client.WatersSpellModClient;
 import net.watersfall.spellmod.math.Dice;
 import net.watersfall.spellmod.spells.Spells;
-import net.watersfall.spellmod.util.EntitySpawnPacket;
 
 public class ChromaticOrbEntity extends ThrownProjectileSpellEntity
 {
@@ -42,25 +36,12 @@ public class ChromaticOrbEntity extends ThrownProjectileSpellEntity
 	{
 		if(!entityHitResult.getEntity().getEntityWorld().isClient)
 		{
-			super.onEntityHit(entityHitResult);
 			if(entityHitResult.getEntity() instanceof LivingEntity)
 			{
 				LivingEntity entity = (LivingEntity) entityHitResult.getEntity();
 				entity.damage(DamageSource.MAGIC, Dice.roll(3, 8));
 			}
-			this.remove();
 		}
-	}
-
-	@Override
-	protected void onBlockHit(BlockHitResult blockHitResult)
-	{
-		this.destroy();
-	}
-
-	@Override
-	public Packet<?> createSpawnPacket()
-	{
-		return EntitySpawnPacket.create(this, WatersSpellModClient.PACKET_ID);
+		super.onEntityHit(entityHitResult);
 	}
 }

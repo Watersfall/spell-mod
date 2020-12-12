@@ -36,7 +36,6 @@ public class ChillTouchEntity extends ThrownProjectileSpellEntity
 	@Override
 	protected void onEntityHit(EntityHitResult entityHitResult)
 	{
-		super.onEntityHit(entityHitResult);
 		if(entityHitResult.getEntity() instanceof LivingEntity)
 		{
 			int damage = (int)(Math.random() * 8) + 1;
@@ -47,19 +46,7 @@ public class ChillTouchEntity extends ThrownProjectileSpellEntity
 			{
 				entity.addStatusEffect(new StatusEffectInstance(StatusEffects.WEAKNESS, 12 * 20));
 			}
-			this.destroy();
 		}
-	}
-
-	@Override
-	protected void onBlockHit(BlockHitResult blockHitResult)
-	{
-		this.destroy();
-	}
-
-	@Override
-	public Packet<?> createSpawnPacket()
-	{
-		return EntitySpawnPacket.create(this, WatersSpellModClient.PACKET_ID);
+		super.onEntityHit(entityHitResult);
 	}
 }

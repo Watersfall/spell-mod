@@ -36,25 +36,12 @@ public class AnimalFriendshipEntity extends ThrownProjectileSpellEntity
 	@Override
 	protected void onEntityHit(EntityHitResult entityHitResult)
 	{
-		super.onEntityHit(entityHitResult);
 		if(entityHitResult.getEntity() instanceof MobEntity)
 		{
 			MobEntity entity = (MobEntity) entityHitResult.getEntity();
 			entity.setTarget(null);
 			entity.addStatusEffect(new StatusEffectInstance(WatersSpellMod.FRIENDSHIP_EFFECT, 20 * 60 * 60 * 24));
 		}
-		this.remove();
-	}
-
-	@Override
-	protected void onBlockHit(BlockHitResult blockHitResult)
-	{
-		this.destroy();
-	}
-
-	@Override
-	public Packet<?> createSpawnPacket()
-	{
-		return EntitySpawnPacket.create(this, WatersSpellModClient.PACKET_ID);
+		super.onEntityHit(entityHitResult);
 	}
 }
