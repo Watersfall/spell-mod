@@ -23,6 +23,7 @@ import net.watersfall.spellmod.client.rendering.PedestalBlockEntityRenderer;
 import net.watersfall.spellmod.entity.AcidSplashEntity;
 import net.watersfall.spellmod.entity.AnimalFriendshipEntity;
 import net.watersfall.spellmod.entity.ChillTouchEntity;
+import net.watersfall.spellmod.entity.ChromaticOrbEntity;
 import net.watersfall.spellmod.util.EntitySpawnPacket;
 
 import java.util.UUID;
@@ -64,6 +65,7 @@ public class WatersSpellModClient implements ClientModInitializer
 		EntityRendererRegistry.INSTANCE.register(WatersSpellMod.ACID_SPLASH_TYPE, (d, c) -> new FlyingItemEntityRenderer<AcidSplashEntity>(d, c.getItemRenderer()));
 		EntityRendererRegistry.INSTANCE.register(WatersSpellMod.CHILL_TOUCH_ENTITY, (d, c) -> new FlyingItemEntityRenderer<ChillTouchEntity>(d, c.getItemRenderer()));
 		EntityRendererRegistry.INSTANCE.register(WatersSpellMod.ANIMAL_FRIENDSHIP_ENTITY, (d, c) -> new FlyingItemEntityRenderer<AnimalFriendshipEntity>(d, c.getItemRenderer()));
+		EntityRendererRegistry.INSTANCE.register(WatersSpellMod.CHROMATIC_ORB_ENTITY, (d, c) -> new FlyingItemEntityRenderer<ChromaticOrbEntity>(d, c.getItemRenderer()));
 		BlockRenderLayerMap.INSTANCE.putBlock(WatersSpellMod.BONFIRE_BLOCK, RenderLayer.getCutout());
 		BlockEntityRendererRegistry.INSTANCE.register(WatersSpellMod.PEDESTAL_BLOCK_ENTITY, PedestalBlockEntityRenderer::new);
 		ScreenRegistry.register(WatersSpellMod.SPELLBOOK_SCREEN_HANDLER, SpellbookGui::new);
