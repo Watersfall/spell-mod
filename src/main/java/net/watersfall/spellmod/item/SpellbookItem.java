@@ -73,6 +73,15 @@ public class SpellbookItem extends Item
 		tag.putIntArray(TagKeys.SPELL_SLOTS, array);
 	}
 
+	public static SpellItem getActiveSpell(ItemStack stack)
+	{
+		if(stack.getTag() != null && stack.getTag().contains(TagKeys.ACTIVE_SPELL))
+		{
+			return Spells.getSpell(stack.getTag().getString(TagKeys.ACTIVE_SPELL)).item;
+		}
+		return null;
+	}
+
 	public SpellbookItem(Settings settings, SpellClass spellClass)
 	{
 		super(settings);

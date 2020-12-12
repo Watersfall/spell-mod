@@ -32,6 +32,7 @@ public class SpellbookScreenHandler extends ScreenHandler
 		super(WatersSpellMod.SPELLBOOK_SCREEN_HANDLER, syncId);
 		this.inventory = (SpellbookInventory) inventory;
 		int cantrips = ((SpellbookItem)this.inventory.getStack().getItem()).spellClass.knownCantrips[SpellbookItem.getLevel(this.inventory.getStack())];
+		SpellItem activeItem = SpellbookItem.getActiveSpell(this.inventory.getStack());
 		int m;
 		int l;
 		for (m = 0; m < 3; ++m)
@@ -40,7 +41,12 @@ public class SpellbookScreenHandler extends ScreenHandler
 			{
 				if(this.inventory.size() > l + m * 9)
 				{
-					this.addSlot(new SpellSlot(inventory, l + m * 9, 8 + l * 18, 18 + m * 18, SpellClass.WIZARD, cantrips > l + m * 9 ? 0 : 1));
+					SpellSlot slot = new SpellSlot(inventory, l + m * 9, 8 + l * 18, 18 + m * 18, SpellClass.WIZARD, cantrips > l + m * 9 ? 0 : 1);
+					if(activeItem != null && activeItem == slot.getStack().getItem())
+					{
+						slot.selected = true;
+					}
+					this.addSlot(slot);
 				}
 			}
 		}
@@ -80,18 +86,27 @@ public class SpellbookScreenHandler extends ScreenHandler
 				if(this.inventory.getStack(slotId) != ItemStack.EMPTY)
 				{
 					this.inventory.getStack().getTag().putString(TagKeys.ACTIVE_SPELL, Registry.ITEM.getId(this.inventory.getStack(slotId).getItem()).toString());
+					if(!((SpellSlot)this.slots.get(slotId)).selected)
+					{
+						for(int i = 0; i < this.inventory.size(); i++)
+						{
+							((SpellSlot)slots.get(i)).selected = false;
+						}
+						((SpellSlot)this.slots.get(slotId)).selected = true;
+					}
 				}
 			}
 		}
 		return super.onSlotClick(slotId, clickData, actionType, playerEntity);
 	}
 
-	static class SpellSlot extends Slot
+	public static class SpellSlot extends Slot
 	{
 		public static final Identifier BLOCK_ATLAS_TEXTURE = new Identifier("textures/atlas/blocks.png");
 		public static final Identifier C_TEXTURE = WatersSpellMod.getId("item/c");
 		public static final Identifier S_TEXTURE = WatersSpellMod.getId("item/s");
 
+		public boolean selected = false;
 		public final SpellClass spellClass;
 		public final int level;
 
