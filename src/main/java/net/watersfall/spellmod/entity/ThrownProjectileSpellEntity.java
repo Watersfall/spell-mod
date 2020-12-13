@@ -7,7 +7,7 @@ import net.minecraft.network.Packet;
 import net.minecraft.util.hit.BlockHitResult;
 import net.minecraft.util.hit.EntityHitResult;
 import net.minecraft.world.World;
-import net.watersfall.spellmod.client.WatersSpellModClient;
+import net.watersfall.spellmod.WatersSpellMod;
 import net.watersfall.spellmod.util.Packets;
 
 public abstract class ThrownProjectileSpellEntity extends ThrownItemEntity
@@ -44,7 +44,7 @@ public abstract class ThrownProjectileSpellEntity extends ThrownItemEntity
 	@Override
 	public Packet<?> createSpawnPacket()
 	{
-		return Packets.create(this, WatersSpellModClient.PACKET_ID);
+		return Packets.create(this, WatersSpellMod.SPAWN_PACKET_ID);
 	}
 
 	@Override

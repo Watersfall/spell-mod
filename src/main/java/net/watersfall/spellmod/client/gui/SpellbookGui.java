@@ -17,6 +17,7 @@ import net.minecraft.text.TranslatableText;
 import net.minecraft.util.Hand;
 import net.minecraft.util.Identifier;
 import net.watersfall.spellmod.WatersSpellMod;
+import net.watersfall.spellmod.item.SpellItem;
 import net.watersfall.spellmod.item.SpellbookItem;
 import net.watersfall.spellmod.screen.SpellbookScreenHandler;
 import net.watersfall.spellmod.spells.Spell;
@@ -26,10 +27,11 @@ import java.awt.*;
 
 public class SpellbookGui extends HandledScreen<ScreenHandler>
 {
-	private static final Identifier TEXTURE = new Identifier("textures/gui/container/shulker_box.png");
+	private static final Identifier TEXTURE = WatersSpellMod.getId("textures/gui/container/spellbook.png");
 	private static final int COLOR = new Color(0F, 0F, 1F, 0.25F).hashCode();
 	private ButtonWidget decreaseLevelButton;
 	private ButtonWidget increaseLevelButton;
+	private int spellLevel = -1;
 
 	public SpellbookGui(ScreenHandler handler, PlayerInventory inventory, Text title)
 	{
@@ -39,8 +41,9 @@ public class SpellbookGui extends HandledScreen<ScreenHandler>
 	@Override
 	protected void init()
 	{
+		this.backgroundWidth = 244;
 		super.init();
-		this.decreaseLevelButton = new ButtonWidget(this.x + this.backgroundWidth, this.y + 17, 18, 18, new LiteralText("<"), (button) -> {
+		this.decreaseLevelButton = new ButtonWidget(this.x + 172 + ((244 - 176) / 2) - 18 - 9, this.y + 17, 18, 18, new LiteralText("<"), (button) -> {
 			ItemStack stack = ((SpellbookScreenHandler)this.handler).inventory.getStack();
 			Spell spell = SpellbookItem.getActiveSpell(stack).spell;
 			int level = SpellbookItem.getSpellLevel(stack);
@@ -50,7 +53,7 @@ public class SpellbookGui extends HandledScreen<ScreenHandler>
 				initButtons();
 			}
 		});
-		this.increaseLevelButton = new ButtonWidget(this.x + this.backgroundWidth + 32, this.y + 17, 18, 18, new LiteralText(">"), (button) -> {
+		this.increaseLevelButton = new ButtonWidget(this.x + 172 + ((244 - 176) / 2) + 18 - 9, this.y + 17, 18, 18, new LiteralText(">"), (button) -> {
 			ItemStack stack = ((SpellbookScreenHandler)this.handler).inventory.getStack();
 			Spell spell = SpellbookItem.getActiveSpell(stack).spell;
 			int level = SpellbookItem.getSpellLevel(stack);
@@ -65,32 +68,38 @@ public class SpellbookGui extends HandledScreen<ScreenHandler>
 
 	private void initButtons()
 	{
+		this.spellLevel = -1;
 		ItemStack stack = ((SpellbookScreenHandler)this.handler).inventory.getStack();
-		Spell spell = SpellbookItem.getActiveSpell(stack).spell;
-		this.children.clear();
-		this.buttons.clear();
-		if(spell != null)
+		SpellItem spellItem = SpellbookItem.getActiveSpell(stack);
+		if(spellItem != null)
 		{
-			if(spell.maxLevel > spell.minLevel)
+			Spell spell = spellItem.spell;
+			this.spellLevel = SpellbookItem.getSpellLevel(stack);
+			this.children.clear();
+			this.buttons.clear();
+			if(spell != null)
 			{
-				int level = SpellbookItem.getSpellLevel(stack);
-				if(level > spell.minLevel)
+				if(spell.maxLevel > spell.minLevel)
 				{
-					this.addButton(decreaseLevelButton);
-				}
-				if(level < spell.maxLevel)
-				{
-					this.addButton(increaseLevelButton);
-				}
-				if(level == spell.minLevel)
-				{
-					this.buttons.remove(decreaseLevelButton);
-					this.children.remove(decreaseLevelButton);
-				}
-				if(level == spell.maxLevel)
-				{
-					this.buttons.remove(increaseLevelButton);
-					this.children.remove(increaseLevelButton);
+					int level = SpellbookItem.getSpellLevel(stack);
+					if(level > spell.minLevel)
+					{
+						this.addButton(decreaseLevelButton);
+					}
+					if(level < spell.maxLevel)
+					{
+						this.addButton(increaseLevelButton);
+					}
+					if(level == spell.minLevel)
+					{
+						this.buttons.remove(decreaseLevelButton);
+						this.children.remove(decreaseLevelButton);
+					}
+					if(level == spell.maxLevel)
+					{
+						this.buttons.remove(increaseLevelButton);
+						this.children.remove(increaseLevelButton);
+					}
 				}
 			}
 		}
@@ -109,7 +118,14 @@ public class SpellbookGui extends HandledScreen<ScreenHandler>
 		renderBackground(matrices);
 		super.render(matrices, mouseX, mouseY, delta);
 		OrderedText text = new TranslatableText("text.waters_spell_mod.casting_level").asOrderedText();
-		textRenderer.draw(matrices, text, (float)((this.x + this.backgroundWidth + 18 + 8) - textRenderer.getWidth(text) / 2), this.y + 6, 4210752);
+		textRenderer.draw(matrices, text, (float)(this.x + 172 + ((244 - 176) / 2) - textRenderer.getWidth(text) / 2), this.y + 6, 4210752);
+		if(this.spellLevel != -1)
+		{
+			RenderSystem.pushMatrix();
+			OrderedText text2 = new LiteralText("" + this.spellLevel).asOrderedText();
+			textRenderer.draw(matrices, text2, (float)(this.x + 172 + ((244 - 176) / 2) - 2), this.y + 22, 4210752);
+			RenderSystem.popMatrix();
+		}
 		RenderSystem.pushMatrix();
 		RenderSystem.translatef((float)this.x, (float)this.y, 0.0F);
 		for(Slot slot : this.handler.slots)
@@ -139,7 +155,7 @@ public class SpellbookGui extends HandledScreen<ScreenHandler>
 		MinecraftClient.getInstance().world.sendPacket(Packets.create(
 				((SpellbookScreenHandler)this.handler).inventory.getStack(),
 				Hand.MAIN_HAND,
-				WatersSpellMod.PACKET_ID
+				WatersSpellMod.BUTTON_PACKET_ID
 		));
 	}
 

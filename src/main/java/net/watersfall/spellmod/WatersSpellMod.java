@@ -51,7 +51,8 @@ public class WatersSpellMod implements ModInitializer
 {
 	public static final String MOD_ID = "waters_spell_mod";
 
-	public static final Identifier PACKET_ID = getId("button_packet");
+	public static final Identifier BUTTON_PACKET_ID = getId("button_packet");
+	public static final Identifier SPAWN_PACKET_ID = getId("spawn_packet");
 	public static final ItemGroup SPELL_MOD_GROUP;
 	public static final SpellbookItem SPELLBOOK_BARD;
 	public static final SpellbookItem SPELLBOOK_CLERIC;
@@ -126,7 +127,7 @@ public class WatersSpellMod implements ModInitializer
 		PEDESTAL_ITEM = new BlockItem(PEDESTAL_BLOCK, new FabricItemSettings().group(SPELL_MOD_GROUP));
 		PEDESTAL_BLOCK_ENTITY = Registry.register(Registry.BLOCK_ENTITY_TYPE, getId("pedestal_entity"), BlockEntityType.Builder.create(PedestalBlockEntity::new, PEDESTAL_BLOCK).build(null));
 		SPELLBOOK_SCREEN_HANDLER = ScreenHandlerRegistry.registerExtended(getId("spellbook_screen_handler"), SpellbookScreenHandler::new);
-		ServerSidePacketRegistry.INSTANCE.register(PACKET_ID, (context, buf) -> {
+		ServerSidePacketRegistry.INSTANCE.register(BUTTON_PACKET_ID, (context, buf) -> {
 			Hand hand = Hand.values()[buf.readByte()];
 			ItemStack stack = buf.readItemStack();
 			PlayerEntity player = context.getPlayer();

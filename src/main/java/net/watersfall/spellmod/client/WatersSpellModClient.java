@@ -13,7 +13,6 @@ import net.minecraft.client.render.RenderLayer;
 import net.minecraft.client.render.entity.FlyingItemEntityRenderer;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityType;
-import net.minecraft.util.Identifier;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.util.registry.Registry;
 import net.watersfall.spellmod.WatersSpellMod;
@@ -30,11 +29,10 @@ import java.util.UUID;
 @Environment(EnvType.CLIENT)
 public class WatersSpellModClient implements ClientModInitializer
 {
-	public static final Identifier PACKET_ID = WatersSpellMod.getId("spawn_packet");
 
 	public void receiveEntityPacket()
 	{
-		ClientSidePacketRegistry.INSTANCE.register(PACKET_ID, (ctx, byteBuf) -> {
+		ClientSidePacketRegistry.INSTANCE.register(WatersSpellMod.SPAWN_PACKET_ID, (ctx, byteBuf) -> {
 			EntityType<?> et = Registry.ENTITY_TYPE.get(byteBuf.readVarInt());
 			UUID uuid = byteBuf.readUuid();
 			int entityId = byteBuf.readVarInt();
