@@ -128,7 +128,8 @@ public class SpellbookItem extends Item
 					Spell spell = Spells.getSpell(stack.getTag().getString(TagKeys.ACTIVE_SPELL));
 					if(spell.item.level > 0)
 					{
-						if(getSpellSlots(stack, spell.item.level - 1) > 0)
+						int castingLevel = getSpellLevel(stack);
+						if(getSpellSlots(stack, castingLevel - 1) > 0)
 						{
 							user.setCurrentHand(hand);
 							return TypedActionResult.consume(stack);
@@ -155,13 +156,13 @@ public class SpellbookItem extends Item
 				Spell spell = Spells.getSpell(stack.getTag().getString(TagKeys.ACTIVE_SPELL));
 				if(spell != null)
 				{
-					if(spell.item.level <= 0 || getSpellSlots(stack, spell.item.level - 1) > 0)
+					if(spell.item.level <= 0 || getSpellSlots(stack, getSpellLevel(stack) - 1) > 0)
 					{
 						((PlayerEntity) user).getItemCooldownManager().set(stack.getItem(), spell.castingTime);
 						spell.use(stack, world, (PlayerEntity) user);
 						if(spell.item.level > 0)
 						{
-							subtractSpellSlot(stack, spell.item.level - 1);
+							subtractSpellSlot(stack, getSpellLevel(stack) - 1);
 						}
 					}
 				}
