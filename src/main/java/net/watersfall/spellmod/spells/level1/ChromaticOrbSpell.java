@@ -5,6 +5,7 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.util.TypedActionResult;
 import net.minecraft.world.World;
 import net.watersfall.spellmod.entity.ChromaticOrbEntity;
+import net.watersfall.spellmod.item.SpellbookItem;
 import net.watersfall.spellmod.spells.Spell;
 
 public class ChromaticOrbSpell extends Spell
@@ -17,7 +18,7 @@ public class ChromaticOrbSpell extends Spell
 
 	public ChromaticOrbSpell(String id)
 	{
-		super(id, 20, 1);
+		super(id, 20, 1, 9);
 	}
 
 	@Override
@@ -26,6 +27,7 @@ public class ChromaticOrbSpell extends Spell
 		if(!world.isClient)
 		{
 			ChromaticOrbEntity entity = new ChromaticOrbEntity(user, world);
+			entity.setLevel(SpellbookItem.getSpellLevel(stack));
 			entity.setOwner(user);
 			entity.setProperties(user, user.pitch, user.yaw, 0.0F, 1.5F, 0F);
 			world.spawnEntity(entity);

@@ -12,7 +12,7 @@ public class BoomingBladeSpell extends Spell
 {
 	public BoomingBladeSpell(String id)
 	{
-		super(id, 20, 0);
+		super(id, 20, 0, 0);
 	}
 
 	@Override

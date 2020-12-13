@@ -49,6 +49,20 @@ public class SpellbookItem extends Item
 		stack.getOrCreateTag().putInt(TagKeys.LEVEL, level);
 	}
 
+	public static int getSpellLevel(ItemStack stack)
+	{
+		if(stack.getOrCreateTag() != null && stack.getTag().contains(TagKeys.SPELL_LEVEL))
+		{
+			return stack.getTag().getInt(TagKeys.SPELL_LEVEL);
+		}
+		return 0;
+	}
+
+	public static void setSpellLevel(ItemStack stack, int level)
+	{
+		stack.getOrCreateTag().putInt(TagKeys.SPELL_LEVEL, level);
+	}
+
 	public static void setSpellSlots(ItemStack stack)
 	{
 		CompoundTag tag = stack.getOrCreateTag();

@@ -12,7 +12,7 @@ public class ArmorOfAgathysSpell extends Spell
 {
 	public ArmorOfAgathysSpell(String id)
 	{
-		super(id, 20, 1);
+		super(id, 20, 1, 9);
 	}
 
 	@Override

@@ -14,7 +14,7 @@ public class CreateBonfireSpell extends Spell
 {
 	public CreateBonfireSpell(String id)
 	{
-		super(id, 20, 0);
+		super(id, 20, 0, 0);
 	}
 
 	@Override

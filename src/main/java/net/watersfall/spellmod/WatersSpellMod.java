@@ -4,6 +4,7 @@ import net.fabricmc.api.ModInitializer;
 import net.fabricmc.fabric.api.client.itemgroup.FabricItemGroupBuilder;
 import net.fabricmc.fabric.api.event.player.AttackEntityCallback;
 import net.fabricmc.fabric.api.item.v1.FabricItemSettings;
+import net.fabricmc.fabric.api.network.ServerSidePacketRegistry;
 import net.fabricmc.fabric.api.object.builder.v1.block.FabricBlockSettings;
 import net.fabricmc.fabric.api.object.builder.v1.entity.FabricEntityTypeBuilder;
 import net.fabricmc.fabric.api.screenhandler.v1.ScreenHandlerRegistry;
@@ -18,9 +19,11 @@ import net.minecraft.entity.SpawnGroup;
 import net.minecraft.entity.effect.StatusEffect;
 import net.minecraft.entity.effect.StatusEffectInstance;
 import net.minecraft.entity.effect.StatusEffectType;
+import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.*;
 import net.minecraft.screen.ScreenHandlerType;
 import net.minecraft.util.ActionResult;
+import net.minecraft.util.Hand;
 import net.minecraft.util.Identifier;
 import net.minecraft.util.registry.Registry;
 import net.watersfall.spellmod.block.PedestalBlock;
@@ -48,6 +51,7 @@ public class WatersSpellMod implements ModInitializer
 {
 	public static final String MOD_ID = "waters_spell_mod";
 
+	public static final Identifier PACKET_ID = getId("button_packet");
 	public static final ItemGroup SPELL_MOD_GROUP;
 	public static final SpellbookItem SPELLBOOK_BARD;
 	public static final SpellbookItem SPELLBOOK_CLERIC;
@@ -122,7 +126,14 @@ public class WatersSpellMod implements ModInitializer
 		PEDESTAL_ITEM = new BlockItem(PEDESTAL_BLOCK, new FabricItemSettings().group(SPELL_MOD_GROUP));
 		PEDESTAL_BLOCK_ENTITY = Registry.register(Registry.BLOCK_ENTITY_TYPE, getId("pedestal_entity"), BlockEntityType.Builder.create(PedestalBlockEntity::new, PEDESTAL_BLOCK).build(null));
 		SPELLBOOK_SCREEN_HANDLER = ScreenHandlerRegistry.registerExtended(getId("spellbook_screen_handler"), SpellbookScreenHandler::new);
-
+		ServerSidePacketRegistry.INSTANCE.register(PACKET_ID, (context, buf) -> {
+			Hand hand = Hand.values()[buf.readByte()];
+			ItemStack stack = buf.readItemStack();
+			PlayerEntity player = context.getPlayer();
+			context.getTaskQueue().execute(() -> {
+				player.setStackInHand(hand, stack);
+			});
+		});
 	}
 
 	public static Identifier getId(String id)

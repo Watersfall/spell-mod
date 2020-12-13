@@ -1,16 +1,19 @@
 package net.watersfall.spellmod.util;
 
 import io.netty.buffer.Unpooled;
+import net.fabricmc.fabric.api.network.ClientSidePacketRegistry;
 import net.fabricmc.fabric.api.network.ServerSidePacketRegistry;
 import net.minecraft.entity.Entity;
+import net.minecraft.item.ItemStack;
 import net.minecraft.network.Packet;
 import net.minecraft.network.PacketByteBuf;
+import net.minecraft.util.Hand;
 import net.minecraft.util.Identifier;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.util.registry.Registry;
 
-public class EntitySpawnPacket
+public class Packets
 {
 	public static Packet<?> create(Entity e, Identifier packetID)
 	{
@@ -25,6 +28,14 @@ public class EntitySpawnPacket
 		PacketBufUtil.writeAngle(byteBuf, e.pitch);
 		PacketBufUtil.writeAngle(byteBuf, e.yaw);
 		return ServerSidePacketRegistry.INSTANCE.toPacket(packetID, byteBuf);
+	}
+
+	public static Packet<?> create(ItemStack stack, Hand hand, Identifier packetId)
+	{
+		PacketByteBuf byteBuf = new PacketByteBuf(Unpooled.buffer());
+		byteBuf.writeByte(hand.ordinal());
+		byteBuf.writeItemStack(stack);
+		return ClientSidePacketRegistry.INSTANCE.toPacket(packetId, byteBuf);
 	}
 
 	public static final class PacketBufUtil

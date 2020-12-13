@@ -86,6 +86,7 @@ public class SpellbookScreenHandler extends ScreenHandler
 				if(this.inventory.getStack(slotId) != ItemStack.EMPTY)
 				{
 					this.inventory.getStack().getTag().putString(TagKeys.ACTIVE_SPELL, Registry.ITEM.getId(this.inventory.getStack(slotId).getItem()).toString());
+					this.inventory.getStack().getTag().putInt(TagKeys.SPELL_LEVEL, ((SpellItem)this.inventory.getStack(slotId).getItem()).spell.minLevel);
 					if(!((SpellSlot)this.slots.get(slotId)).selected)
 					{
 						for(int i = 0; i < this.inventory.size(); i++)

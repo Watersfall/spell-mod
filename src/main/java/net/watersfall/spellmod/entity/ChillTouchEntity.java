@@ -6,14 +6,10 @@ import net.minecraft.entity.damage.DamageSource;
 import net.minecraft.entity.effect.StatusEffectInstance;
 import net.minecraft.entity.effect.StatusEffects;
 import net.minecraft.item.Item;
-import net.minecraft.network.Packet;
-import net.minecraft.util.hit.BlockHitResult;
 import net.minecraft.util.hit.EntityHitResult;
 import net.minecraft.world.World;
 import net.watersfall.spellmod.WatersSpellMod;
-import net.watersfall.spellmod.client.WatersSpellModClient;
 import net.watersfall.spellmod.spells.Spells;
-import net.watersfall.spellmod.util.EntitySpawnPacket;
 
 public class ChillTouchEntity extends ThrownProjectileSpellEntity
 {

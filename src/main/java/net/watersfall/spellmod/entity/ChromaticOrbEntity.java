@@ -13,12 +13,10 @@ import net.watersfall.spellmod.spells.Spells;
 
 public class ChromaticOrbEntity extends ThrownProjectileSpellEntity
 {
-
 	public ChromaticOrbEntity(EntityType<? extends ThrownItemEntity> entityType, World world)
 	{
 		super(entityType, world);
 	}
-
 
 	public ChromaticOrbEntity(LivingEntity livingEntity, World world)
 	{
@@ -39,7 +37,7 @@ public class ChromaticOrbEntity extends ThrownProjectileSpellEntity
 			if(entityHitResult.getEntity() instanceof LivingEntity)
 			{
 				LivingEntity entity = (LivingEntity) entityHitResult.getEntity();
-				entity.damage(DamageSource.MAGIC, Dice.roll(3, 8));
+				entity.damage(DamageSource.MAGIC, Dice.roll(2 + this.level, 8));
 			}
 		}
 		super.onEntityHit(entityHitResult);

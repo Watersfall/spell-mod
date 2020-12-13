@@ -10,7 +10,6 @@ import net.fabricmc.fabric.api.client.screenhandler.v1.ScreenRegistry;
 import net.fabricmc.fabric.api.network.ClientSidePacketRegistry;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.render.RenderLayer;
-import net.minecraft.client.render.RenderLayers;
 import net.minecraft.client.render.entity.FlyingItemEntityRenderer;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityType;
@@ -24,7 +23,7 @@ import net.watersfall.spellmod.entity.AcidSplashEntity;
 import net.watersfall.spellmod.entity.AnimalFriendshipEntity;
 import net.watersfall.spellmod.entity.ChillTouchEntity;
 import net.watersfall.spellmod.entity.ChromaticOrbEntity;
-import net.watersfall.spellmod.util.EntitySpawnPacket;
+import net.watersfall.spellmod.util.Packets;
 
 import java.util.UUID;
 
@@ -39,9 +38,9 @@ public class WatersSpellModClient implements ClientModInitializer
 			EntityType<?> et = Registry.ENTITY_TYPE.get(byteBuf.readVarInt());
 			UUID uuid = byteBuf.readUuid();
 			int entityId = byteBuf.readVarInt();
-			Vec3d pos = EntitySpawnPacket.PacketBufUtil.readVec3d(byteBuf);
-			float pitch = EntitySpawnPacket.PacketBufUtil.readAngle(byteBuf);
-			float yaw = EntitySpawnPacket.PacketBufUtil.readAngle(byteBuf);
+			Vec3d pos = Packets.PacketBufUtil.readVec3d(byteBuf);
+			float pitch = Packets.PacketBufUtil.readAngle(byteBuf);
+			float yaw = Packets.PacketBufUtil.readAngle(byteBuf);
 			ctx.getTaskQueue().execute(() -> {
 				if(MinecraftClient.getInstance().world == null)
 					throw new IllegalStateException("Tried to spawn entity in a null world!");

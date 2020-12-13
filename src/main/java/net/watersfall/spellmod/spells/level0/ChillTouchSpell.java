@@ -12,7 +12,7 @@ public class ChillTouchSpell extends Spell
 
 	public ChillTouchSpell(String id)
 	{
-		super(id, 20, 0);
+		super(id, 20, 0, 0);
 	}
 
 	@Override

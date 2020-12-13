@@ -17,6 +17,7 @@ public abstract class Spell
 	public final SpellItem item;
 	public final String id;
 	public final String translationKey;
+	public final int minLevel, maxLevel;
 	public final int castingTime;
 
 	//Same as Item#raycast, but with a range
@@ -35,17 +36,24 @@ public abstract class Spell
 		return world.raycast(new RaycastContext(vec3d, vec3d2, RaycastContext.ShapeType.OUTLINE, fluidHandling, player));
 	}
 
-	public Spell(String id, int castingTime, int level)
+	public Spell(String id, int castingTime, int level, int maxLevel)
 	{
 		this.id = id;
 		this.castingTime = castingTime;
 		translationKey = "item." + id.split(":")[0] + "." + id.split(":")[1];
-		item = new SpellItem(new FabricItemSettings().group(WatersSpellMod.SPELL_MOD_GROUP).maxCount(1), this.castingTime, level);
+		item = new SpellItem(new FabricItemSettings().group(WatersSpellMod.SPELL_MOD_GROUP).maxCount(1), this.castingTime, level, this);
+		this.minLevel = level;
+		this.maxLevel = maxLevel;
 	}
 
 	public SpellItem getItem()
 	{
 		return item;
+	}
+
+	public boolean hasMultipleModes()
+	{
+		return false;
 	}
 
 	public abstract TypedActionResult<ItemStack> use(ItemStack stack, World world, PlayerEntity user);

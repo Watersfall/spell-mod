@@ -7,12 +7,13 @@ import net.minecraft.network.Packet;
 import net.minecraft.util.hit.BlockHitResult;
 import net.minecraft.util.hit.EntityHitResult;
 import net.minecraft.world.World;
-import net.watersfall.spellmod.WatersSpellMod;
 import net.watersfall.spellmod.client.WatersSpellModClient;
-import net.watersfall.spellmod.util.EntitySpawnPacket;
+import net.watersfall.spellmod.util.Packets;
 
 public abstract class ThrownProjectileSpellEntity extends ThrownItemEntity
 {
+	protected int level;
+
 	public ThrownProjectileSpellEntity(EntityType<? extends ThrownItemEntity> entityType, World world)
 	{
 		super(entityType, world);
@@ -43,7 +44,7 @@ public abstract class ThrownProjectileSpellEntity extends ThrownItemEntity
 	@Override
 	public Packet<?> createSpawnPacket()
 	{
-		return EntitySpawnPacket.create(this, WatersSpellModClient.PACKET_ID);
+		return Packets.create(this, WatersSpellModClient.PACKET_ID);
 	}
 
 	@Override
@@ -51,5 +52,10 @@ public abstract class ThrownProjectileSpellEntity extends ThrownItemEntity
 	{
 		super.tick();
 		//Eventually max range stuff
+	}
+
+	public void setLevel(int level)
+	{
+		this.level = level;
 	}
 }
