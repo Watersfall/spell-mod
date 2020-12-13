@@ -56,5 +56,10 @@ public abstract class Spell
 		return false;
 	}
 
+	public int[] getModes()
+	{
+		return new int[]{0};
+	}
+
 	public abstract TypedActionResult<ItemStack> use(ItemStack stack, World world, PlayerEntity user);
 }

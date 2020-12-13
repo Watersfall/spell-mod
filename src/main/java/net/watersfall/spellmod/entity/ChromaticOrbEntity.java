@@ -10,9 +10,12 @@ import net.minecraft.world.World;
 import net.watersfall.spellmod.WatersSpellMod;
 import net.watersfall.spellmod.math.Dice;
 import net.watersfall.spellmod.spells.Spells;
+import net.watersfall.spellmod.spells.level1.ChromaticOrbSpell;
 
 public class ChromaticOrbEntity extends ThrownProjectileSpellEntity
 {
+	protected int variant;
+
 	public ChromaticOrbEntity(EntityType<? extends ThrownItemEntity> entityType, World world)
 	{
 		super(entityType, world);
@@ -21,6 +24,16 @@ public class ChromaticOrbEntity extends ThrownProjectileSpellEntity
 	public ChromaticOrbEntity(LivingEntity livingEntity, World world)
 	{
 		super(WatersSpellMod.CHROMATIC_ORB_ENTITY, livingEntity, world);
+	}
+
+	public void setVariant(int variant)
+	{
+		this.variant = variant;
+	}
+
+	public int getVariant()
+	{
+		return this.variant;
 	}
 
 	@Override
@@ -36,8 +49,17 @@ public class ChromaticOrbEntity extends ThrownProjectileSpellEntity
 		{
 			if(entityHitResult.getEntity() instanceof LivingEntity)
 			{
+				DamageSource source;
+				switch(this.variant)
+				{
+					case ChromaticOrbSpell.LIGHTNING:
+						source = DamageSource.LIGHTNING_BOLT;
+						break;
+					default:
+						source = DamageSource.MAGIC;
+				}
 				LivingEntity entity = (LivingEntity) entityHitResult.getEntity();
-				entity.damage(DamageSource.MAGIC, Dice.roll(2 + this.level, 8));
+				entity.damage(source, Dice.roll(2 + this.level, 8));
 			}
 		}
 		super.onEntityHit(entityHitResult);

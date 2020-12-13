@@ -1,5 +1,7 @@
 package net.watersfall.spellmod.constants;
 
+import net.watersfall.spellmod.spells.Spell;
+
 public class LangKeys
 {
 	public static final String LEVEL = "text.waters_spell_mod.level";
@@ -10,5 +12,10 @@ public class LangKeys
 	public static String getLeveledSpellSlot(int level)
 	{
 		return String.format(LEVELED_SPELL_SLOT, level);
+	}
+
+	public static String getSpellVariant(Spell spell, int variant)
+	{
+		return spell.translationKey + "_" + variant;
 	}
 }

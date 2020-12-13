@@ -28,10 +28,23 @@ public class ChromaticOrbSpell extends Spell
 		{
 			ChromaticOrbEntity entity = new ChromaticOrbEntity(user, world);
 			entity.setLevel(SpellbookItem.getSpellLevel(stack));
+			entity.setVariant(SpellbookItem.getSpellVariant(stack));
 			entity.setOwner(user);
 			entity.setProperties(user, user.pitch, user.yaw, 0.0F, 1.5F, 0F);
 			world.spawnEntity(entity);
 		}
 		return TypedActionResult.success(stack, world.isClient);
+	}
+
+	@Override
+	public boolean hasMultipleModes()
+	{
+		return true;
+	}
+
+	@Override
+	public int[] getModes()
+	{
+		return new int[]{ACID, COLD, LIGHTNING, POISON, THUNDER};
 	}
 }

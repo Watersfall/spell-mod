@@ -96,6 +96,20 @@ public class SpellbookItem extends Item
 		return null;
 	}
 
+	public static int getSpellVariant(ItemStack stack)
+	{
+		if(stack.getTag() != null && stack.getTag().contains(TagKeys.SPELL_VARIANT))
+		{
+			return stack.getTag().getInt(TagKeys.SPELL_VARIANT);
+		}
+		return 0;
+	}
+
+	public static void setSpellVariant(ItemStack stack, int variant)
+	{
+		stack.getOrCreateTag().putInt(TagKeys.SPELL_VARIANT, variant);
+	}
+
 	public SpellbookItem(Settings settings, SpellClass spellClass)
 	{
 		super(settings);
