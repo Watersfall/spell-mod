@@ -15,6 +15,7 @@ import net.minecraft.network.PacketByteBuf;
 import net.minecraft.screen.ScreenHandler;
 import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.text.LiteralText;
+import net.minecraft.text.MutableText;
 import net.minecraft.text.Text;
 import net.minecraft.text.TranslatableText;
 import net.minecraft.util.Formatting;
@@ -231,7 +232,13 @@ public class SpellbookItem extends Item
 			tooltip.add(new TranslatableText(LangKeys.LEVEL).append(": " + getLevel(stack)));
 			if(stack.getTag().contains(TagKeys.ACTIVE_SPELL))
 			{
-				tooltip.add(new TranslatableText(Spells.getSpell(stack.getTag().getString(TagKeys.ACTIVE_SPELL)).translationKey).formatted(Formatting.GRAY, Formatting.ITALIC));
+				Spell spell = Spells.getSpell(stack.getTag().getString(TagKeys.ACTIVE_SPELL));
+				MutableText text = new TranslatableText(spell.translationKey).formatted(Formatting.GRAY, Formatting.ITALIC);
+				if(spell.hasMultipleModes() && stack.getTag().contains(TagKeys.SPELL_VARIANT))
+				{
+					text.append(" (").append(new TranslatableText(LangKeys.getSpellVariant(spell, getSpellVariant(stack)))).append(")");
+				}
+				tooltip.add(text);
 			}
 			if(InputUtil.isKeyPressed(MinecraftClient.getInstance().getWindow().getHandle(), MinecraftClient.getInstance().options.keySneak.boundKey.getCode()))
 			{
