@@ -49,7 +49,7 @@ public class SpellbookGui extends HandledScreen<ScreenHandler>
 	{
 		this.backgroundWidth = 244;
 		super.init();
-		this.decreaseLevelButton = new ButtonWidget(this.x + 172 + ((244 - 176) / 2) - 18 - 9, this.y + 17, 18, 18, new LiteralText("<"), (button) -> {
+		this.decreaseLevelButton = new ButtonWidget(this.x + 172 + ((244 - 176) / 2) - 18 - 9, this.y + 17, 18, 20, new LiteralText("<"), (button) -> {
 			ItemStack stack = ((SpellbookScreenHandler)this.handler).inventory.getStack();
 			Spell spell = SpellbookItem.getActiveSpell(stack).spell;
 			int level = SpellbookItem.getSpellLevel(stack);
@@ -59,7 +59,7 @@ public class SpellbookGui extends HandledScreen<ScreenHandler>
 				initButtons();
 			}
 		});
-		this.increaseLevelButton = new ButtonWidget(this.x + 172 + ((244 - 176) / 2) + 18 - 9, this.y + 17, 18, 18, new LiteralText(">"), (button) -> {
+		this.increaseLevelButton = new ButtonWidget(this.x + 172 + ((244 - 176) / 2) + 18 - 9, this.y + 17, 18, 20, new LiteralText(">"), (button) -> {
 			ItemStack stack = ((SpellbookScreenHandler)this.handler).inventory.getStack();
 			Spell spell = SpellbookItem.getActiveSpell(stack).spell;
 			int level = SpellbookItem.getSpellLevel(stack);
@@ -116,7 +116,7 @@ public class SpellbookGui extends HandledScreen<ScreenHandler>
 								this.x + 172 + ((244 - 176) / 2) - 18 - 9,
 								this.y + 17 + ((i + 2) * 18),
 								18 + 18 + 18,
-								18,
+								20,
 								stack,
 								i,
 								spell,
@@ -160,14 +160,14 @@ public class SpellbookGui extends HandledScreen<ScreenHandler>
 		{
 			RenderSystem.pushMatrix();
 			OrderedText text2 = new LiteralText("" + this.spellLevel).asOrderedText();
-			textRenderer.draw(matrices, text2, (float)(this.x + 172 + ((244 - 176) / 2) - 2), this.y + 22, 4210752);
+			textRenderer.draw(matrices, text2, (float)(this.x + 172 + ((244 - 176) / 2) - 2), this.y + 23, 4210752);
 			RenderSystem.popMatrix();
 		}
 		if(this.variant != -1)
 		{
 			RenderSystem.pushMatrix();
 			OrderedText text2 = new TranslatableText("text.waters_spell_mod.variant").asOrderedText();
-			textRenderer.draw(matrices, text2, (float)(this.x + 172 + ((244 - 176) / 2) - (textRenderer.getWidth(text2) / 2)), this.y + 40, 4210752);
+			textRenderer.draw(matrices, text2, (float)(this.x + 172 + ((244 - 176) / 2) - (textRenderer.getWidth(text2) / 2)), this.y + 41, 4210752);
 			RenderSystem.popMatrix();
 		}
 		RenderSystem.pushMatrix();
