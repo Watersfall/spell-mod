@@ -18,7 +18,7 @@ public class ArmorOfAgathysEffect extends SpecialStatusEffect
 	public void onRemoved(LivingEntity entity, AttributeContainer attributes, int amplifier)
 	{
 		super.onRemoved(entity, attributes, amplifier);
-		entity.setAbsorptionAmount(entity.getAbsorptionAmount() - 5);
+		entity.setAbsorptionAmount(entity.getAbsorptionAmount() - 5 * amplifier);
 		if(entity instanceof ArmorOfAgathysAccessor)
 		{
 			ArmorOfAgathysAccessor accessor = (ArmorOfAgathysAccessor) entity;
@@ -30,11 +30,11 @@ public class ArmorOfAgathysEffect extends SpecialStatusEffect
 	public void onApplied(LivingEntity entity, AttributeContainer attributes, int amplifier)
 	{
 		super.onApplied(entity, attributes, amplifier);
-		entity.setAbsorptionAmount(entity.getAbsorptionAmount() + 5);
+		entity.setAbsorptionAmount(entity.getAbsorptionAmount() + 5 * amplifier);
 		if(entity instanceof ArmorOfAgathysAccessor)
 		{
 			ArmorOfAgathysAccessor accessor = (ArmorOfAgathysAccessor) entity;
-			accessor.setArmorOfAgathysAmount(5);
+			accessor.setArmorOfAgathysAmount(5 * amplifier);
 		}
 	}
 }

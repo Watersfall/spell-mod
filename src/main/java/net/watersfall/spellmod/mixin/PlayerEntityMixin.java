@@ -47,7 +47,7 @@ public abstract class PlayerEntityMixin extends LivingEntity
 				if(this.hasStatusEffect(WatersSpellMod.ARMOR_OF_AGATHYS_EFFECT))
 				{
 					LivingEntity livingEntity = (LivingEntity)source.getAttacker();
-					livingEntity.damage(DamageSource.MAGIC, 5);
+					livingEntity.damage(DamageSource.MAGIC, 5 * this.getStatusEffect(WatersSpellMod.ARMOR_OF_AGATHYS_EFFECT).getAmplifier());
 				}
 			}
 		}
