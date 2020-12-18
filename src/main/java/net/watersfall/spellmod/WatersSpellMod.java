@@ -30,20 +30,18 @@ import net.watersfall.spellmod.block.PedestalBlock;
 import net.watersfall.spellmod.block.entity.PedestalBlockEntity;
 import net.watersfall.spellmod.effect.ArmorOfAgathysEffect;
 import net.watersfall.spellmod.effect.FriendshipEffect;
-import net.watersfall.spellmod.entity.AnimalFriendshipEntity;
-import net.watersfall.spellmod.entity.ChromaticOrbEntity;
+import net.watersfall.spellmod.entity.*;
 import net.watersfall.spellmod.screen.SpellbookScreenHandler;
 import net.watersfall.spellmod.spells.SpellClass;
 import net.watersfall.spellmod.spells.Spells;
 import net.watersfall.spellmod.block.BonfireBlock;
 import net.watersfall.spellmod.effect.SpecialStatusEffect;
-import net.watersfall.spellmod.entity.AcidSplashEntity;
-import net.watersfall.spellmod.entity.ChillTouchEntity;
 import net.watersfall.spellmod.item.SpellbookItem;
 import net.watersfall.spellmod.spells.level0.*;
 import net.watersfall.spellmod.spells.level1.AnimalFriendshipSpell;
 import net.watersfall.spellmod.spells.level1.ArmorOfAgathysSpell;
 import net.watersfall.spellmod.spells.level1.ChromaticOrbSpell;
+import net.watersfall.spellmod.spells.level2.CloudOfDaggersSpell;
 
 import java.awt.*;
 
@@ -71,6 +69,7 @@ public class WatersSpellMod implements ModInitializer
 	public static final EntityType<ChillTouchEntity> CHILL_TOUCH_ENTITY;
 	public static final EntityType<AnimalFriendshipEntity> ANIMAL_FRIENDSHIP_ENTITY;
 	public static final EntityType<ChromaticOrbEntity> CHROMATIC_ORB_ENTITY;
+	public static final EntityType<CloudOfDaggersEntity> CLOUD_OF_DAGGERS_ENTITY;
 	public static final StatusEffect BOOMING_BLADE_GIVE = new SpecialStatusEffect(StatusEffectType.BENEFICIAL, Color.YELLOW.hashCode());
 	public static final StatusEffect BOOMING_BLADE = new SpecialStatusEffect(StatusEffectType.HARMFUL, Color.YELLOW.hashCode());
 	public static final StatusEffect CHILL_OF_THE_GRAVE = new SpecialStatusEffect(StatusEffectType.HARMFUL, Color.BLACK.hashCode());
@@ -123,6 +122,15 @@ public class WatersSpellMod implements ModInitializer
 						.trackedUpdateRate(10)
 						.build()
 		);
+		CLOUD_OF_DAGGERS_ENTITY = Registry.register(Registry.ENTITY_TYPE,
+				getId("cloud_of_daggers_entity"),
+				FabricEntityTypeBuilder.<CloudOfDaggersEntity>create(SpawnGroup.MISC, CloudOfDaggersEntity::new)
+						.dimensions(EntityDimensions.fixed(5F / 3F, 5F / 3F))
+						.fireImmune()
+						.trackRangeBlocks(4)
+						.trackedUpdateRate(10)
+						.build()
+		);
 		PEDESTAL_BLOCK = new PedestalBlock(AbstractBlock.Settings.of(Material.STONE));
 		PEDESTAL_ITEM = new BlockItem(PEDESTAL_BLOCK, new FabricItemSettings().group(SPELL_MOD_GROUP));
 		PEDESTAL_BLOCK_ENTITY = Registry.register(Registry.BLOCK_ENTITY_TYPE, getId("pedestal_entity"), BlockEntityType.Builder.create(PedestalBlockEntity::new, PEDESTAL_BLOCK).build(null));
@@ -167,6 +175,7 @@ public class WatersSpellMod implements ModInitializer
 		Spells.addSpell(getId("animal_friendship_spell"), new AnimalFriendshipSpell(getId("animal_friendship_spell").toString()));
 		Spells.addSpell(getId("armor_of_agathys_spell"), new ArmorOfAgathysSpell(getId("armor_of_agathys_spell").toString()));
 		Spells.addSpell(getId("chromatic_orb_spell"), new ChromaticOrbSpell(getId("chromatic_orb_spell").toString()));
+		Spells.addSpell(getId("cloud_of_daggers_spell"), new CloudOfDaggersSpell(getId("cloud_of_daggers_spell").toString()));
 		Registry.register(Registry.STATUS_EFFECT, getId("effect_booming_blade_give"), BOOMING_BLADE_GIVE);
 		Registry.register(Registry.STATUS_EFFECT, getId("effect_booming_blade"), BOOMING_BLADE);
 		Registry.register(Registry.STATUS_EFFECT, getId("effect_chill_of_the_grave"), CHILL_OF_THE_GRAVE);
