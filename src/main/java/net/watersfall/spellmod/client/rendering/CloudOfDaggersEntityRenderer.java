@@ -6,9 +6,13 @@ import net.minecraft.client.render.entity.EntityRenderer;
 import net.minecraft.client.render.item.ItemRenderer;
 import net.minecraft.client.render.model.json.ModelTransformation;
 import net.minecraft.client.util.math.MatrixStack;
+import net.minecraft.client.util.math.Vector3f;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.Items;
 import net.minecraft.util.Identifier;
+import net.minecraft.util.math.Quaternion;
+import net.minecraft.util.math.Vec3d;
+import net.minecraft.util.math.Vec3i;
 import net.watersfall.spellmod.WatersSpellMod;
 import net.watersfall.spellmod.entity.CloudOfDaggersEntity;
 
@@ -44,8 +48,10 @@ public class CloudOfDaggersEntityRenderer extends EntityRenderer<CloudOfDaggersE
 			{
 				for(int z = -1; z <= 1; z++)
 				{
+					float offset = entity.getEntityWorld().getTime();
 					matrices.push();
 					matrices.translate(x * 5F / 6F, y * 5F / 6F, z * 5F / 6F);
+					matrices.multiply(Vector3f.NEGATIVE_Z.getRadialQuaternion(offset));
 					itemRenderer.renderItem(STACK, ModelTransformation.Mode.GROUND, light, light, matrices, vertexConsumers);
 					matrices.pop();
 				}
