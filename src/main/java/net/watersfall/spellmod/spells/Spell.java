@@ -1,10 +1,15 @@
 package net.watersfall.spellmod.spells;
 
 import net.fabricmc.fabric.api.item.v1.FabricItemSettings;
+import net.minecraft.entity.Entity;
+import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.entity.projectile.ProjectileUtil;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.TypedActionResult;
 import net.minecraft.util.hit.BlockHitResult;
+import net.minecraft.util.hit.HitResult;
+import net.minecraft.util.math.Box;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.RaycastContext;
@@ -54,6 +59,21 @@ public abstract class Spell
 	public boolean hasMultipleModes()
 	{
 		return false;
+	}
+
+	public boolean canTargetSelect()
+	{
+		return false;
+	}
+
+	public boolean isValidTarget(Entity entity)
+	{
+		return false;
+	}
+
+	public int getMaxTargets(int level)
+	{
+		return 0;
 	}
 
 	public int[] getModes()

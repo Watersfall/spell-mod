@@ -1,0 +1,13 @@
+{
+	"required": true,
+	"minVersion": "0.8",
+	"package": "net.watersfall.spellmod.client.mixin",
+	"compatibilityLevel": "JAVA_8",
+	"client": [
+		"MinecraftClientMixin",
+		"EntityRendererMixin"
+	],
+	"injectors": {
+		"defaultRequire": 1
+	}
+}

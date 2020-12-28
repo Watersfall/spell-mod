@@ -1,0 +1,13 @@
+{
+	"replace": false,
+	"values": [
+		"waters_spell_mod:spellbook_bard",
+		"waters_spell_mod:spellbook_cleric",
+		"waters_spell_mod:spellbook_druid",
+		"waters_spell_mod:spellbook_paladin",
+		"waters_spell_mod:spellbook_ranger",
+		"waters_spell_mod:spellbook_sorcerer",
+		"waters_spell_mod:spellbook_warlock",
+		"waters_spell_mod:spellbook_wizard"
+	]
+}

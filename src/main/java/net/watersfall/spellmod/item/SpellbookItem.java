@@ -1,6 +1,9 @@
 package net.watersfall.spellmod.item;
 
+import net.fabricmc.api.EnvType;
+import net.fabricmc.api.Environment;
 import net.fabricmc.fabric.api.screenhandler.v1.ExtendedScreenHandlerFactory;
+import net.minecraft.block.BlockState;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.item.TooltipContext;
 import net.minecraft.client.util.InputUtil;
@@ -22,6 +25,7 @@ import net.minecraft.util.Formatting;
 import net.minecraft.util.Hand;
 import net.minecraft.util.TypedActionResult;
 import net.minecraft.util.UseAction;
+import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import net.watersfall.spellmod.constants.LangKeys;
 import net.watersfall.spellmod.constants.TagKeys;
@@ -31,7 +35,9 @@ import net.watersfall.spellmod.spells.Spell;
 import net.watersfall.spellmod.spells.SpellClass;
 import net.watersfall.spellmod.spells.Spells;
 
+import java.util.Arrays;
 import java.util.List;
+import java.util.UUID;
 
 public class SpellbookItem extends Item
 {
@@ -115,6 +121,101 @@ public class SpellbookItem extends Item
 	{
 		super(settings);
 		this.spellClass = spellClass;
+	}
+
+	@Environment(EnvType.CLIENT)
+	public static void target(ItemStack stack, Entity entity)
+	{
+		if(isEntityTargeted(stack, entity))
+		{
+			long[] oldArray = stack.getOrCreateTag().getLongArray("targets");
+			if(oldArray.length == 2)
+			{
+				stack.getOrCreateTag().remove("targets");
+				return;
+			}
+			long[] uuid = new long[]{entity.getUuid().getMostSignificantBits(), entity.getUuid().getLeastSignificantBits()};
+			long[] newArray = new long[oldArray.length - 2];
+			int oldIndex = 0;
+			for(int i = 0; i < newArray.length; i++)
+			{
+				if(oldArray[oldIndex] == uuid[0] && oldArray[oldIndex + 1] == uuid[1])
+				{
+					oldIndex += 2;
+				}
+				newArray[i] = oldArray[oldIndex];
+				oldIndex++;
+			}
+			stack.getTag().putLongArray("targets", newArray);
+		}
+		else
+		{
+			long[] oldArray = stack.getOrCreateTag().getLongArray("targets");
+			long[] uuid = new long[]{entity.getUuid().getMostSignificantBits(), entity.getUuid().getLeastSignificantBits()};
+			Spell spell = getActiveSpell(stack).spell;
+			int level = getLevel(stack);
+			if(oldArray.length / 2 >= spell.getMaxTargets(level))
+			{
+				long[] newArray = new long[spell.getMaxTargets(level) * 2];
+				System.arraycopy(oldArray, 2, newArray, 0, newArray.length - 2);
+				newArray[newArray.length - 2] = uuid[0];
+				newArray[newArray.length - 1] = uuid[1];
+				stack.getTag().putLongArray("targets", newArray);
+			}
+			else
+			{
+				long[] newArray = Arrays.copyOf(oldArray, oldArray.length + uuid.length);
+				System.arraycopy(uuid, 0, newArray, oldArray.length, newArray.length - oldArray.length);
+				stack.getTag().putLongArray("targets", newArray);
+			}
+		}
+	}
+
+	public static UUID[] getTargets(ItemStack stack)
+	{
+		UUID[] list;
+		if(stack.getOrCreateTag().contains("targets"))
+		{
+			long[] array = stack.getOrCreateTag().getLongArray("targets");
+			list = new UUID[array.length / 2];
+			for(int i = 0; i < list.length; i++)
+			{
+				list[i] = new UUID(array[i * 2], array[i * 2 + 1]);
+			}
+		}
+		else
+		{
+			list = new UUID[0];
+		}
+		return list;
+	}
+
+	public static boolean isEntityTargeted(ItemStack stack, Entity entity)
+	{
+		long[] array = stack.getOrCreateTag().getLongArray("targets");
+		UUID uuid = entity.getUuid();
+		for(int i = 0; i < array.length; i = i + 2)
+		{
+			if(uuid.getMostSignificantBits() == array[i])
+			{
+				if(uuid.getLeastSignificantBits() == array[i + 1])
+				{
+					return true;
+				}
+			}
+		}
+		return false;
+	}
+
+	public static void clearTargets(ItemStack stack)
+	{
+		stack.getOrCreateTag().remove("targets");
+	}
+
+	@Override
+	public boolean canMine(BlockState state, World world, BlockPos pos, PlayerEntity miner)
+	{
+		return false;
 	}
 
 	@Override

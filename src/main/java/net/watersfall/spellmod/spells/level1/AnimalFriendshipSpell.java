@@ -1,11 +1,18 @@
 package net.watersfall.spellmod.spells.level1;
 
+import net.minecraft.entity.Entity;
+import net.minecraft.entity.effect.StatusEffectInstance;
+import net.minecraft.entity.mob.MobEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.ItemStack;
+import net.minecraft.server.world.ServerWorld;
 import net.minecraft.util.TypedActionResult;
 import net.minecraft.world.World;
-import net.watersfall.spellmod.entity.AnimalFriendshipEntity;
+import net.watersfall.spellmod.WatersSpellMod;
+import net.watersfall.spellmod.item.SpellbookItem;
 import net.watersfall.spellmod.spells.Spell;
+
+import java.util.UUID;
 
 public class AnimalFriendshipSpell extends Spell
 {
@@ -15,14 +22,39 @@ public class AnimalFriendshipSpell extends Spell
 	}
 
 	@Override
+	public boolean canTargetSelect()
+	{
+		return true;
+	}
+
+	@Override
+	public int getMaxTargets(int level)
+	{
+		return 2 + level;
+	}
+
+	@Override
+	public boolean isValidTarget(Entity entity)
+	{
+		return entity instanceof MobEntity;
+	}
+
+	@Override
 	public TypedActionResult<ItemStack> use(ItemStack stack, World world, PlayerEntity user)
 	{
 		if(!world.isClient)
 		{
-			AnimalFriendshipEntity entity = new AnimalFriendshipEntity(user, world);
-			entity.setOwner(user);
-			entity.setProperties(user, user.pitch, user.yaw, 0.0F, 1.5F, 0F);
-			world.spawnEntity(entity);
+			UUID[] uuids = SpellbookItem.getTargets(stack);
+			for(int i = 0; i < uuids.length; i++)
+			{
+				MobEntity entity = (MobEntity)((ServerWorld)world).getEntity(uuids[i]);
+				if(entity != null)
+				{
+					entity.setTarget(null);
+					entity.addStatusEffect(new StatusEffectInstance(WatersSpellMod.FRIENDSHIP_EFFECT, 20 * 60 * 60 * 24));
+				}
+			}
+			SpellbookItem.clearTargets(stack);
 		}
 		return TypedActionResult.success(stack, world.isClient);
 	}

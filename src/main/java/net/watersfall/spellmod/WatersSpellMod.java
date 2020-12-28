@@ -8,6 +8,7 @@ import net.fabricmc.fabric.api.network.ServerSidePacketRegistry;
 import net.fabricmc.fabric.api.object.builder.v1.block.FabricBlockSettings;
 import net.fabricmc.fabric.api.object.builder.v1.entity.FabricEntityTypeBuilder;
 import net.fabricmc.fabric.api.screenhandler.v1.ScreenHandlerRegistry;
+import net.fabricmc.fabric.api.tag.TagRegistry;
 import net.minecraft.block.AbstractBlock;
 import net.minecraft.block.Material;
 import net.minecraft.block.MaterialColor;
@@ -22,6 +23,7 @@ import net.minecraft.entity.effect.StatusEffectType;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.*;
 import net.minecraft.screen.ScreenHandlerType;
+import net.minecraft.tag.Tag;
 import net.minecraft.util.ActionResult;
 import net.minecraft.util.Hand;
 import net.minecraft.util.Identifier;
@@ -51,6 +53,7 @@ public class WatersSpellMod implements ModInitializer
 
 	public static final Identifier BUTTON_PACKET_ID = getId("button_packet");
 	public static final Identifier SPAWN_PACKET_ID = getId("spawn_packet");
+	public static final Identifier TARGET_PACKET_ID = getId("target");
 	public static final ItemGroup SPELL_MOD_GROUP;
 	public static final SpellbookItem SPELLBOOK_BARD;
 	public static final SpellbookItem SPELLBOOK_CLERIC;
@@ -67,7 +70,6 @@ public class WatersSpellMod implements ModInitializer
 	public static final BlockItem BONFIRE_ITEM;
 	public static final EntityType<AcidSplashEntity> ACID_SPLASH_TYPE;
 	public static final EntityType<ChillTouchEntity> CHILL_TOUCH_ENTITY;
-	public static final EntityType<AnimalFriendshipEntity> ANIMAL_FRIENDSHIP_ENTITY;
 	public static final EntityType<ChromaticOrbEntity> CHROMATIC_ORB_ENTITY;
 	public static final EntityType<CloudOfDaggersEntity> CLOUD_OF_DAGGERS_ENTITY;
 	public static final StatusEffect BOOMING_BLADE_GIVE = new SpecialStatusEffect(StatusEffectType.BENEFICIAL, Color.YELLOW.hashCode());
@@ -76,6 +78,7 @@ public class WatersSpellMod implements ModInitializer
 	public static final StatusEffect FRIENDSHIP_EFFECT = new FriendshipEffect(StatusEffectType.HARMFUL, Color.RED.hashCode());
 	public static final StatusEffect ARMOR_OF_AGATHYS_EFFECT = new ArmorOfAgathysEffect();
 	public static final ScreenHandlerType<SpellbookScreenHandler> SPELLBOOK_SCREEN_HANDLER;
+	public static final Tag<Item> SPELLBOOK_TAG;
 
 	static
 	{
@@ -106,14 +109,6 @@ public class WatersSpellMod implements ModInitializer
 						.trackedUpdateRate(10)
 						.build()
 				);
-		ANIMAL_FRIENDSHIP_ENTITY = Registry.register(Registry.ENTITY_TYPE,
-				getId("animal_friendship_entity"),
-				FabricEntityTypeBuilder.<AnimalFriendshipEntity>create(SpawnGroup.MISC, AnimalFriendshipEntity::new)
-						.dimensions(EntityDimensions.fixed(0.25F, 0.25F))
-						.trackRangeBlocks(4)
-						.trackedUpdateRate(10)
-						.build()
-		);
 		CHROMATIC_ORB_ENTITY = Registry.register(Registry.ENTITY_TYPE,
 				getId("chromatic_orb_entity"),
 				FabricEntityTypeBuilder.<ChromaticOrbEntity>create(SpawnGroup.MISC, ChromaticOrbEntity::new)
@@ -143,6 +138,15 @@ public class WatersSpellMod implements ModInitializer
 				player.setStackInHand(hand, stack);
 			});
 		});
+		ServerSidePacketRegistry.INSTANCE.register(TARGET_PACKET_ID, ((context, buf) -> {
+			Hand hand = Hand.values()[buf.readByte()];
+			ItemStack stack = buf.readItemStack();
+			PlayerEntity player = context.getPlayer();
+			context.getTaskQueue().execute(() -> {
+				player.setStackInHand(hand, stack);
+			});
+		}));
+		SPELLBOOK_TAG = TagRegistry.item(getId("spellbooks"));
 	}
 
 	public static Identifier getId(String id)

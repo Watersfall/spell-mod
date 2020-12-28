@@ -22,7 +22,8 @@
 		]
 	},
 	"mixins": [
-		"spellmod.mixins.json"
+		"spellmod.mixins.json",
+		"client.spellmod.mixins.json"
 	],
 	"accessWidener": "waters_spell_mod.accesswidener",
 	"depends": {
