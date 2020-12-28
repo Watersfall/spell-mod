@@ -153,7 +153,7 @@ public class SpellbookItem extends Item
 			long[] oldArray = stack.getOrCreateTag().getLongArray("targets");
 			long[] uuid = new long[]{entity.getUuid().getMostSignificantBits(), entity.getUuid().getLeastSignificantBits()};
 			Spell spell = getActiveSpell(stack).spell;
-			int level = getLevel(stack);
+			int level = getSpellLevel(stack);
 			if(oldArray.length / 2 >= spell.getMaxTargets(level))
 			{
 				long[] newArray = new long[spell.getMaxTargets(level) * 2];
