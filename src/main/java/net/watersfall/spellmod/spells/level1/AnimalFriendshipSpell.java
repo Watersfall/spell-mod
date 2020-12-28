@@ -18,7 +18,7 @@ public class AnimalFriendshipSpell extends Spell
 {
 	public AnimalFriendshipSpell(String id)
 	{
-		super(id, 20, 1, 1);
+		super(id, 20, 1, 9);
 	}
 
 	@Override
