@@ -30,6 +30,7 @@ import net.minecraft.util.Identifier;
 import net.minecraft.util.registry.Registry;
 import net.watersfall.spellmod.block.PedestalBlock;
 import net.watersfall.spellmod.block.entity.PedestalBlockEntity;
+import net.watersfall.spellmod.effect.AidEffect;
 import net.watersfall.spellmod.effect.ArmorOfAgathysEffect;
 import net.watersfall.spellmod.effect.FriendshipEffect;
 import net.watersfall.spellmod.entity.*;
@@ -43,6 +44,7 @@ import net.watersfall.spellmod.spells.level0.*;
 import net.watersfall.spellmod.spells.level1.AnimalFriendshipSpell;
 import net.watersfall.spellmod.spells.level1.ArmorOfAgathysSpell;
 import net.watersfall.spellmod.spells.level1.ChromaticOrbSpell;
+import net.watersfall.spellmod.spells.level2.AidSpell;
 import net.watersfall.spellmod.spells.level2.CloudOfDaggersSpell;
 
 import java.awt.*;
@@ -77,6 +79,7 @@ public class WatersSpellMod implements ModInitializer
 	public static final StatusEffect CHILL_OF_THE_GRAVE = new SpecialStatusEffect(StatusEffectType.HARMFUL, Color.BLACK.hashCode());
 	public static final StatusEffect FRIENDSHIP_EFFECT = new FriendshipEffect(StatusEffectType.HARMFUL, Color.RED.hashCode());
 	public static final StatusEffect ARMOR_OF_AGATHYS_EFFECT = new ArmorOfAgathysEffect();
+	public static final StatusEffect AID_STATUS_EFFECT = new AidEffect();
 	public static final ScreenHandlerType<SpellbookScreenHandler> SPELLBOOK_SCREEN_HANDLER;
 	public static final Tag<Item> SPELLBOOK_TAG;
 
@@ -180,11 +183,13 @@ public class WatersSpellMod implements ModInitializer
 		Spells.addSpell(getId("armor_of_agathys_spell"), new ArmorOfAgathysSpell(getId("armor_of_agathys_spell").toString()));
 		Spells.addSpell(getId("chromatic_orb_spell"), new ChromaticOrbSpell(getId("chromatic_orb_spell").toString()));
 		Spells.addSpell(getId("cloud_of_daggers_spell"), new CloudOfDaggersSpell(getId("cloud_of_daggers_spell").toString()));
+		Spells.addSpell(getId("aid_spell"), new AidSpell(getId("aid_spell").toString()));
 		Registry.register(Registry.STATUS_EFFECT, getId("effect_booming_blade_give"), BOOMING_BLADE_GIVE);
 		Registry.register(Registry.STATUS_EFFECT, getId("effect_booming_blade"), BOOMING_BLADE);
 		Registry.register(Registry.STATUS_EFFECT, getId("effect_chill_of_the_grave"), CHILL_OF_THE_GRAVE);
 		Registry.register(Registry.STATUS_EFFECT, getId("effect_friendship"), FRIENDSHIP_EFFECT);
 		Registry.register(Registry.STATUS_EFFECT, getId("effect_armor_of_agathys"), ARMOR_OF_AGATHYS_EFFECT);
+		Registry.register(Registry.STATUS_EFFECT, getId("effect_aid"), AID_STATUS_EFFECT);
 		AttackEntityCallback.EVENT.register((player, world, hand, entity, result) -> {
 			if(entity instanceof LivingEntity)
 			{
