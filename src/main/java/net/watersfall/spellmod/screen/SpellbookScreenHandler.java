@@ -31,7 +31,7 @@ public class SpellbookScreenHandler extends ScreenHandler
 	{
 		super(WatersSpellMod.SPELLBOOK_SCREEN_HANDLER, syncId);
 		this.inventory = (SpellbookInventory) inventory;
-		int cantrips = ((SpellbookItem)this.inventory.getStack().getItem()).spellClass.knownCantrips[SpellbookItem.getLevel(this.inventory.getStack())];
+		int cantrips = ((SpellbookItem)this.inventory.getStack().getItem()).spellClass.knownCantrips[SpellbookItem.getBookLevel(this.inventory.getStack()) - 1];
 		SpellItem activeItem = SpellbookItem.getActiveSpell(this.inventory.getStack());
 		int m;
 		int l;

@@ -79,7 +79,7 @@ public class PedestalBlockEntity extends BlockEntity implements BlockEntityClien
 	@Override
 	public void tick()
 	{
-		if(!this.world.isClient)
+		if(this.world != null && !this.world.isClient)
 		{
 			ticks++;
 			if(ticks >= 100)
@@ -87,16 +87,21 @@ public class PedestalBlockEntity extends BlockEntity implements BlockEntityClien
 				ticks = 0;
 				if(!this.stack.isEmpty())
 				{
-					List<PlayerEntity> entities = this.world.getEntitiesByType(EntityType.PLAYER, new Box(this.pos).expand(5), (entity) -> entity.experienceLevel >= SpellbookItem.getLevel(this.stack) * 2);
-					if(entities.size() > 0)
+					int level = SpellbookItem.getBookLevel(this.stack);
+					if(level < 20)
 					{
-						PlayerEntity victim = entities.get((int)(Math.random() * entities.size()));
-						victim.experienceLevel -= SpellbookItem.getLevel(this.stack);
-						this.stack.getOrCreateTag().putInt(TagKeys.LEVEL, this.stack.getTag().getInt(TagKeys.LEVEL) + 1);
-						SpellbookItem.setSpellSlots(this.stack);
-						this.sync();
-						this.markDirty();
-						((ServerPlayerEntity)victim).networkHandler.sendPacket(new ExperienceBarUpdateS2CPacket(victim.experienceProgress, victim.totalExperience, victim.experienceLevel));
+						List<PlayerEntity> entities = this.world.getEntitiesByType(EntityType.PLAYER, new Box(this.pos).expand(5), (entity) -> entity.experienceLevel >= SpellbookItem.getBookLevel(this.stack) * 2);
+						if(entities.size() > 0)
+						{
+							PlayerEntity victim = entities.get((int)(Math.random() * entities.size()));
+							victim.experienceLevel -= SpellbookItem.getBookLevel(this.stack);
+							this.stack.getOrCreateTag().putInt(TagKeys.LEVEL, this.stack.getTag().getInt(TagKeys.LEVEL) + 1);
+							SpellbookItem.setSpellSlots(this.stack);
+							SpellbookItem.fixInventory(this.stack);
+							this.sync();
+							this.markDirty();
+							((ServerPlayerEntity)victim).networkHandler.sendPacket(new ExperienceBarUpdateS2CPacket(victim.experienceProgress, victim.totalExperience, victim.experienceLevel));
+						}
 					}
 				}
 			}

@@ -11,6 +11,7 @@ import net.minecraft.entity.Entity;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.player.PlayerInventory;
+import net.minecraft.inventory.Inventories;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.CompoundTag;
@@ -21,10 +22,7 @@ import net.minecraft.text.LiteralText;
 import net.minecraft.text.MutableText;
 import net.minecraft.text.Text;
 import net.minecraft.text.TranslatableText;
-import net.minecraft.util.Formatting;
-import net.minecraft.util.Hand;
-import net.minecraft.util.TypedActionResult;
-import net.minecraft.util.UseAction;
+import net.minecraft.util.*;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import net.watersfall.spellmod.constants.LangKeys;
@@ -35,6 +33,7 @@ import net.watersfall.spellmod.spells.Spell;
 import net.watersfall.spellmod.spells.SpellClass;
 import net.watersfall.spellmod.spells.Spells;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.UUID;
@@ -42,8 +41,38 @@ import java.util.UUID;
 public class SpellbookItem extends Item
 {
 	public final SpellClass spellClass;
+
+	public static void fixInventory(ItemStack stack)
+	{
+		SpellbookInventory inventory = new SpellbookInventory(stack);
+		ArrayList<ItemStack> removed = new ArrayList<>();
+		if(!inventory.isEmpty())
+		{
+			int cantrips = ((SpellbookItem)stack.getItem()).spellClass.knownCantrips[getBookLevel(stack) - 1];
+			for(int i = 0; i < cantrips; i++)
+			{
+				ItemStack invStack = inventory.getStack(i);
+				if(!invStack.isEmpty() && ((SpellItem)invStack.getItem()).spell.minLevel > 0)
+				{
+					removed.add(inventory.removeStack(i));
+				}
+			}
+			int removedCounter = removed.size();
+			for(int i = cantrips; i < inventory.size() && removedCounter > 0; i++)
+			{
+				ItemStack invStack = inventory.getStack(i);
+				if(invStack.isEmpty())
+				{
+					inventory.setStack(i, removed.get(0));
+					removed.remove(0);
+					removedCounter--;
+				}
+			}
+			inventory.markDirty();
+		}
+	}
 	
-	public static int getLevel(ItemStack stack)
+	public static int getBookLevel(ItemStack stack)
 	{
 		if(stack.getTag() != null)
 		{
@@ -51,7 +80,7 @@ public class SpellbookItem extends Item
 		}
 		return 1;
 	}
-	public static void setLevel(ItemStack stack, int level)
+	public static void setBookLevel(ItemStack stack, int level)
 	{
 		stack.getOrCreateTag().putInt(TagKeys.LEVEL, level);
 	}
@@ -74,7 +103,7 @@ public class SpellbookItem extends Item
 	{
 		CompoundTag tag = stack.getOrCreateTag();
 		SpellClass spellClass = ((SpellbookItem)stack.getItem()).spellClass;
-		tag.putIntArray(TagKeys.SPELL_SLOTS, spellClass.levels[getLevel(stack)]);
+		tag.putIntArray(TagKeys.SPELL_SLOTS, spellClass.levels[getBookLevel(stack)]);
 	}
 
 	public static int getSpellSlots(ItemStack stack, int level)
@@ -225,7 +254,6 @@ public class SpellbookItem extends Item
 		if(stack.getTag() == null)
 		{
 			stack = this.getDefaultStack().copy();
-			stack.getTag().putString(TagKeys.SPELL_LIST, "waters_spell_mod:acid_splash_spell;waters_spell_mod:chill_touch_spell");
 			user.setStackInHand(hand, stack);
 			return TypedActionResult.success(user.getStackInHand(hand), world.isClient);
 		}
@@ -291,7 +319,7 @@ public class SpellbookItem extends Item
 	public ItemStack getDefaultStack()
 	{
 		ItemStack stack = super.getDefaultStack();
-		setLevel(stack, 1);
+		setBookLevel(stack, 1);
 		for(int i = 1; i <= 9; i++)
 		{
 			setSpellSlots(stack);
@@ -305,7 +333,7 @@ public class SpellbookItem extends Item
 		super.onCraft(stack, world, player);
 		for(int i = 1; i <= 9; i++)
 		{
-			setSpellSlots(stack);
+			stack.setTag(getDefaultStack().getTag());
 		}
 	}
 
@@ -330,7 +358,7 @@ public class SpellbookItem extends Item
 	{
 		if(stack.getTag() != null)
 		{
-			tooltip.add(new TranslatableText(LangKeys.LEVEL).append(": " + getLevel(stack)));
+			tooltip.add(new TranslatableText(LangKeys.LEVEL).append(": " + getBookLevel(stack)));
 			if(stack.getTag().contains(TagKeys.ACTIVE_SPELL))
 			{
 				Spell spell = Spells.getSpell(stack.getTag().getString(TagKeys.ACTIVE_SPELL));
@@ -346,7 +374,7 @@ public class SpellbookItem extends Item
 				tooltip.add(new TranslatableText(LangKeys.SPELL_SLOTS).append(":"));
 				for(int i = 1; i <= 9; i++)
 				{
-					if(this.spellClass.levels[getLevel(stack) - 1][i-1] > 0)
+					if(this.spellClass.levels[getBookLevel(stack) - 1][i-1] > 0)
 					{
 						tooltip.add(new LiteralText(" - ")
 								.append(new TranslatableText(LangKeys.getLeveledSpellSlot(i)))
@@ -369,6 +397,26 @@ public class SpellbookItem extends Item
 				setSpellSlots(stack);
 			}
 		}
+	}
+
+	@Override
+	public boolean hasGlint(ItemStack stack)
+	{
+		return stack.getTag() != null;
+	}
+
+	@Override
+	public Rarity getRarity(ItemStack stack)
+	{
+		int level = getBookLevel(stack);
+		if(level <= 5)
+			return Rarity.COMMON;
+		else if(level <= 10)
+			return Rarity.UNCOMMON;
+		else if(level <= 15)
+			return Rarity.RARE;
+		else
+			return Rarity.EPIC;
 	}
 
 	private ExtendedScreenHandlerFactory createScreenHandlerFactory(ItemStack stack)

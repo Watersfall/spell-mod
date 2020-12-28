@@ -51,8 +51,7 @@ public class SpellbookInventory implements Inventory
 	{
 		if(amount >= contents.get(slot).getCount())
 		{
-			contents.set(slot, ItemStack.EMPTY);
-			return contents.get(slot);
+			return contents.set(slot, ItemStack.EMPTY);
 		}
 		else
 		{
@@ -64,8 +63,7 @@ public class SpellbookInventory implements Inventory
 	@Override
 	public ItemStack removeStack(int slot)
 	{
-		contents.set(slot, ItemStack.EMPTY);
-		return contents.get(slot);
+		return contents.set(slot, ItemStack.EMPTY);
 	}
 
 	@Override
