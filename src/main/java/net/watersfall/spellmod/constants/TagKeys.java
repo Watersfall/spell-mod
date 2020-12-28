@@ -9,4 +9,5 @@ public class TagKeys
 	public static final String ARMOR_OF_AGATHYS_AMOUNT = "aoaa";
 	public static final String SPELL_LEVEL = "spell_level";
 	public static final String SPELL_VARIANT = "spell_variant";
+	public static final String TARGETS = "targets";
 }

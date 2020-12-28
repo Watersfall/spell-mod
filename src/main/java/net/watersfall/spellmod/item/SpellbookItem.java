@@ -157,10 +157,10 @@ public class SpellbookItem extends Item
 	{
 		if(isEntityTargeted(stack, entity))
 		{
-			long[] oldArray = stack.getOrCreateTag().getLongArray("targets");
+			long[] oldArray = stack.getOrCreateTag().getLongArray(TagKeys.TARGETS);
 			if(oldArray.length == 2)
 			{
-				stack.getOrCreateTag().remove("targets");
+				stack.getOrCreateTag().remove(TagKeys.TARGETS);
 				return;
 			}
 			long[] uuid = new long[]{entity.getUuid().getMostSignificantBits(), entity.getUuid().getLeastSignificantBits()};
@@ -175,11 +175,11 @@ public class SpellbookItem extends Item
 				newArray[i] = oldArray[oldIndex];
 				oldIndex++;
 			}
-			stack.getTag().putLongArray("targets", newArray);
+			stack.getTag().putLongArray(TagKeys.TARGETS, newArray);
 		}
 		else
 		{
-			long[] oldArray = stack.getOrCreateTag().getLongArray("targets");
+			long[] oldArray = stack.getOrCreateTag().getLongArray(TagKeys.TARGETS);
 			long[] uuid = new long[]{entity.getUuid().getMostSignificantBits(), entity.getUuid().getLeastSignificantBits()};
 			Spell spell = getActiveSpell(stack).spell;
 			int level = getSpellLevel(stack);
@@ -189,13 +189,13 @@ public class SpellbookItem extends Item
 				System.arraycopy(oldArray, 2, newArray, 0, newArray.length - 2);
 				newArray[newArray.length - 2] = uuid[0];
 				newArray[newArray.length - 1] = uuid[1];
-				stack.getTag().putLongArray("targets", newArray);
+				stack.getTag().putLongArray(TagKeys.TARGETS, newArray);
 			}
 			else
 			{
 				long[] newArray = Arrays.copyOf(oldArray, oldArray.length + uuid.length);
 				System.arraycopy(uuid, 0, newArray, oldArray.length, newArray.length - oldArray.length);
-				stack.getTag().putLongArray("targets", newArray);
+				stack.getTag().putLongArray(TagKeys.TARGETS, newArray);
 			}
 		}
 	}
@@ -203,9 +203,9 @@ public class SpellbookItem extends Item
 	public static UUID[] getTargets(ItemStack stack)
 	{
 		UUID[] list;
-		if(stack.getOrCreateTag().contains("targets"))
+		if(stack.getOrCreateTag().contains(TagKeys.TARGETS))
 		{
-			long[] array = stack.getOrCreateTag().getLongArray("targets");
+			long[] array = stack.getOrCreateTag().getLongArray(TagKeys.TARGETS);
 			list = new UUID[array.length / 2];
 			for(int i = 0; i < list.length; i++)
 			{
@@ -221,7 +221,7 @@ public class SpellbookItem extends Item
 
 	public static boolean isEntityTargeted(ItemStack stack, Entity entity)
 	{
-		long[] array = stack.getOrCreateTag().getLongArray("targets");
+		long[] array = stack.getOrCreateTag().getLongArray(TagKeys.TARGETS);
 		UUID uuid = entity.getUuid();
 		for(int i = 0; i < array.length; i = i + 2)
 		{
@@ -238,7 +238,7 @@ public class SpellbookItem extends Item
 
 	public static void clearTargets(ItemStack stack)
 	{
-		stack.getOrCreateTag().remove("targets");
+		stack.getOrCreateTag().remove(TagKeys.TARGETS);
 	}
 
 	@Override
