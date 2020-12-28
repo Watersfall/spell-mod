@@ -30,7 +30,7 @@ public class AnimalFriendshipSpell extends Spell
 	@Override
 	public int getMaxTargets(int level)
 	{
-		return 2 + level;
+		return level;
 	}
 
 	@Override
