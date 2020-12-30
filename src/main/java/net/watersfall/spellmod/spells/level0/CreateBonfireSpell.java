@@ -18,12 +18,18 @@ public class CreateBonfireSpell extends Spell
 	}
 
 	@Override
+	public double getRange()
+	{
+		return 20D;
+	}
+
+	@Override
 	public TypedActionResult<ItemStack> use(ItemStack stack, World world, PlayerEntity user)
 	{
 		if(!world.isClient)
 		{
-			BlockHitResult result = raycast(world, user, RaycastContext.FluidHandling.ANY, 20);
-			if(result.getBlockPos().isWithinDistance(user.getBlockPos(), 20D))
+			BlockHitResult result = raycast(world, user, RaycastContext.FluidHandling.ANY, getRange());
+			if(result.getBlockPos().isWithinDistance(user.getBlockPos(), getRange()))
 			{
 				BlockState state = world.getBlockState(result.getBlockPos().up());
 				if(state.isAir())

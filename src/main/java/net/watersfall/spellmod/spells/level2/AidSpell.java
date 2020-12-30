@@ -42,6 +42,12 @@ public class AidSpell extends Spell
 	}
 
 	@Override
+	public double getRange()
+	{
+		return 10D;
+	}
+
+	@Override
 	public TypedActionResult<ItemStack> use(ItemStack stack, World world, PlayerEntity user)
 	{
 		if(!world.isClient)

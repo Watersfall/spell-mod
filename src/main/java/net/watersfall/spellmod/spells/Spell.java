@@ -81,5 +81,10 @@ public abstract class Spell
 		return new int[]{0};
 	}
 
+	public double getRange()
+	{
+		return 0D;
+	}
+
 	public abstract TypedActionResult<ItemStack> use(ItemStack stack, World world, PlayerEntity user);
 }

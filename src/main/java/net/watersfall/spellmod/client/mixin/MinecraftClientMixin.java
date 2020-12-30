@@ -60,7 +60,7 @@ public abstract class MinecraftClientMixin
 						}
 						else if(this.crosshairTarget.getType() == HitResult.Type.MISS)
 						{
-							entity = getTargetedEntity(20, this.getTickDelta());
+							entity = getTargetedEntity(spell.getRange(), this.getTickDelta());
 						}
 						if(entity != null && spell.isValidTarget(entity))
 						{
