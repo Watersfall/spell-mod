@@ -17,6 +17,7 @@ public class SpellProperties
 	private ToIntFunction<ItemStack> maxTargets;
 	private ToBooleanFunction<Entity> isValidTarget;
 	private int[] modes;
+	private SpellClass[] classes;
 
 	public SpellProperties()
 	{
@@ -28,6 +29,7 @@ public class SpellProperties
 		this.castingTime = 20;
 		this.maxTargets = (stack) -> 0;
 		this.modes = new int[]{0};
+		this.classes = new SpellClass[]{};
 		this.isValidTarget = (entity) -> false;
 	}
 
@@ -41,6 +43,7 @@ public class SpellProperties
 		this.castingTime = 20;
 		this.maxTargets = (stack) -> 0;
 		this.modes = new int[]{0};
+		this.classes = new SpellClass[]{};
 		this.isValidTarget = (entity) -> false;
 	}
 
@@ -103,6 +106,12 @@ public class SpellProperties
 		return this;
 	}
 
+	public SpellProperties setClasses(SpellClass... classes)
+	{
+		this.classes = classes;
+		return this;
+	}
+
 	public boolean hasMultipleModes()
 	{
 		return hasMultipleModes;
@@ -141,5 +150,10 @@ public class SpellProperties
 	public int[] getModes()
 	{
 		return modes;
+	}
+
+	public SpellClass[] getClasses()
+	{
+		return classes;
 	}
 }

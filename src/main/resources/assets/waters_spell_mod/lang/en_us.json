@@ -41,6 +41,7 @@
 	"text.waters_spell_mod.spell_slots": "Spell Slots",
 	"text.waters_spell_mod.casting_level": "Casting Level",
 	"text.waters_spell_mod.variant": "Variant",
+	"text.waters_spell_mod.spell_classes": "Spell Classes",
 	"class.waters_spell_mod.bard": "Bard",
 	"class.waters_spell_mod.cleric": "Cleric",
 	"class.waters_spell_mod.druid": "Druid",

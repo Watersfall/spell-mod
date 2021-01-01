@@ -29,6 +29,7 @@ public class Spell
 	public final ToIntFunction<ItemStack> maxTargets;
 	public final ToBooleanFunction<Entity> isValidTarget;
 	public final int[] modes;
+	public final SpellClass[] classes;
 	public final SpellAction action;
 
 	//Same as Item#raycast, but with a range
@@ -58,6 +59,7 @@ public class Spell
 		this.maxTargets = properties.getMaxTargets();
 		this.modes = properties.getModes();
 		this.isValidTarget = properties.getIsValidTarget();
+		this.classes = properties.getClasses();
 		this.action = action;
 		this.item = new SpellItem(new FabricItemSettings().group(WatersSpellMod.SPELL_MOD_GROUP).maxCount(1), this.castingTime, minLevel, this);
 	}
@@ -65,5 +67,17 @@ public class Spell
 	public String getTranslationKey()
 	{
 		return this.item.getTranslationKey();
+	}
+
+	public boolean isInClass(SpellClass spellClass)
+	{
+		for(int i = 0; i < classes.length; i++)
+		{
+			if(classes[i] == spellClass)
+			{
+				return true;
+			}
+		}
+		return false;
 	}
 }

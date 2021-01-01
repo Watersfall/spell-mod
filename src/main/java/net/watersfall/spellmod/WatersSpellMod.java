@@ -155,25 +155,25 @@ public class WatersSpellMod implements ModInitializer
 		}));
 		SPELLBOOK_TAG = TagRegistry.item(getId("spellbooks"));
 		BLADE_WARD_SPELL = Spells.addSpell(getId("blade_ward_spell"),
-				new Spell(new SpellProperties(), SpellAction::BLADE_WARD));
+				new Spell(new SpellProperties().setClasses(SpellClass.BARD, SpellClass.SORCERER, SpellClass.WARLOCK, SpellClass.WIZARD), SpellAction::BLADE_WARD));
 		ACID_SPLASH_SPELL = Spells.addSpell(getId("acid_splash_spell"),
-				new Spell(new SpellProperties(), SpellAction::ACID_SPLASH));
+				new Spell(new SpellProperties().setClasses(SpellClass.SORCERER, SpellClass.WIZARD), SpellAction::ACID_SPLASH));
 		BOOMING_BLADE_SPELL = Spells.addSpell(getId("booming_blade_spell"),
-				new Spell(new SpellProperties(), SpellAction::BOOMING_BLADE));
+				new Spell(new SpellProperties().setClasses(SpellClass.SORCERER, SpellClass.WARLOCK, SpellClass.WIZARD), SpellAction::BOOMING_BLADE));
 		CHILL_TOUCH_SPELL = Spells.addSpell(getId("chill_touch_spell"),
-				new Spell(new SpellProperties().setRange(40D), SpellAction::CHILL_TOUCH));
+				new Spell(new SpellProperties().setRange(40D).setClasses(SpellClass.SORCERER, SpellClass.WARLOCK, SpellClass.WIZARD), SpellAction::CHILL_TOUCH));
 		CREATE_BONFIRE_SPELL = Spells.addSpell(getId("create_bonfire_spell"),
-				new Spell(new SpellProperties().setRange(20D), SpellAction::CREATE_BONFIRE));
+				new Spell(new SpellProperties().setRange(20D).setClasses(SpellClass.DRUID, SpellClass.SORCERER, SpellClass.WARLOCK, SpellClass.WIZARD), SpellAction::CREATE_BONFIRE));
 		ANIMAL_FRIENDSHIP_SPELL = Spells.addSpell(getId("animal_friendship_spell"),
-				new Spell(new SpellProperties(1).setCanTargetSelect(true).setMaxTargets(SpellbookItem::getSpellLevel).setRange(10D).setIsValidTarget((entity) -> entity instanceof MobEntity), SpellAction::ANIMAL_FRIENDSHIP));
+				new Spell(new SpellProperties(1).setCanTargetSelect(true).setMaxTargets(SpellbookItem::getSpellLevel).setRange(10D).setIsValidTarget((entity) -> entity instanceof MobEntity).setClasses(SpellClass.BARD, SpellClass.DRUID, SpellClass.RANGER), SpellAction::ANIMAL_FRIENDSHIP));
 		ARMOR_OF_AGATHYS_SPELL = Spells.addSpell(getId("armor_of_agathys_spell"),
-				new Spell(new SpellProperties(1), SpellAction::ARMOR_OF_AGATHYS));
+				new Spell(new SpellProperties(1).setClasses(SpellClass.WARLOCK), SpellAction::ARMOR_OF_AGATHYS));
 		CHROMATIC_ORB_SPELL = Spells.addSpell(getId("chromatic_orb_spell"),
-				new Spell(new SpellProperties(1).setRange(30D).setHasMultipleModes(true).setModes(SpellModes.Elements.ACID, SpellModes.Elements.COLD, SpellModes.Elements.LIGHTNING, SpellModes.Elements.POISON, SpellModes.Elements.THUNDER), SpellAction::CHROMATIC_ORB));
+				new Spell(new SpellProperties(1).setRange(30D).setHasMultipleModes(true).setModes(SpellModes.Elements.ACID, SpellModes.Elements.COLD, SpellModes.Elements.LIGHTNING, SpellModes.Elements.POISON, SpellModes.Elements.THUNDER).setClasses(SpellClass.SORCERER, SpellClass.WIZARD), SpellAction::CHROMATIC_ORB));
 		AID_SPELL = Spells.addSpell(getId("aid_spell"),
-				new Spell(new SpellProperties(2).setCanTargetSelect(true).setRange(10D).setMaxTargets((stack) -> 3).setIsValidTarget((entity) -> entity instanceof LivingEntity), SpellAction::AID));
+				new Spell(new SpellProperties(2).setCanTargetSelect(true).setRange(10D).setMaxTargets((stack) -> 3).setIsValidTarget((entity) -> entity instanceof LivingEntity).setClasses(SpellClass.CLERIC, SpellClass.PALADIN), SpellAction::AID));
 		CLOUD_OF_DAGGERS_SPELL = Spells.addSpell(getId("cloud_of_daggers_spell"),
-				new Spell(new SpellProperties(2).setRange(20), SpellAction::CLOUD_OF_DAGGERS));
+				new Spell(new SpellProperties(2).setRange(20).setClasses(SpellClass.BARD, SpellClass.SORCERER, SpellClass.WARLOCK, SpellClass.WIZARD), SpellAction::CLOUD_OF_DAGGERS));
 	}
 
 	public static Identifier getId(String id)

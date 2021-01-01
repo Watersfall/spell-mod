@@ -14,12 +14,13 @@ import net.watersfall.spellmod.spells.SpellClass;
 public class SpellbookInventory implements Inventory
 {
 	private final ItemStack stack;
+	private final SpellClass spellClass;
 	private final DefaultedList<ItemStack> contents;
 
 	public SpellbookInventory(ItemStack stack)
 	{
 		this.stack = stack;
-		SpellClass spellClass = ((SpellbookItem)stack.getItem()).spellClass;
+		this.spellClass = ((SpellbookItem)stack.getItem()).spellClass;
 		int count = spellClass.knownCantrips[stack.getTag().getInt(TagKeys.LEVEL) - 1] + spellClass.knownSpells[stack.getTag().getInt(TagKeys.LEVEL) - 1];
 		contents = DefaultedList.ofSize(count, ItemStack.EMPTY);
 		CompoundTag tag = stack.getSubTag(TagKeys.SPELL_LIST);
@@ -99,5 +100,10 @@ public class SpellbookInventory implements Inventory
 	public ItemStack getStack()
 	{
 		return this.stack;
+	}
+
+	public SpellClass getSpellClass()
+	{
+		return this.spellClass;
 	}
 }
