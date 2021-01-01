@@ -107,10 +107,10 @@ public class SpellbookGui extends HandledScreen<ScreenHandler>
 						this.children.remove(increaseLevelButton);
 					}
 				}
-				if(spell.hasMultipleModes())
+				if(spell.hasMultipleModes)
 				{
 					variant = SpellbookItem.getSpellVariant(stack);
-					for(int i : spell.getModes())
+					for(int i : spell.modes)
 					{
 						this.addButton(new SpellEffectButton(
 								this.x + 172 + ((244 - 176) / 2) - 18 - 9,

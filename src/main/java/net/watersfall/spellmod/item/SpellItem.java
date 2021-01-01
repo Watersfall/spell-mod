@@ -14,10 +14,7 @@ public class SpellItem extends Item
 
 	public SpellItem(Settings settings, int castingTime, Spell spell)
 	{
-		super(settings);
-		this.castingTime = castingTime;
-		this.level = 0;
-		this.spell = spell;
+		this(settings, castingTime, 0, spell);
 	}
 
 	public SpellItem(Settings settings, int castingTime, int level, Spell spell)

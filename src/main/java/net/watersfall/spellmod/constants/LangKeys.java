@@ -16,6 +16,6 @@ public class LangKeys
 
 	public static String getSpellVariant(Spell spell, int variant)
 	{
-		return spell.translationKey + "_" + variant;
+		return spell.getTranslationKey() + "_" + variant;
 	}
 }

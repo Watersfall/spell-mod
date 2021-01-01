@@ -41,7 +41,7 @@ public abstract class EntityRendererMixin<T extends Entity>
 				if(item != null)
 				{
 					Spell spell = item.spell;
-					if(spell.canTargetSelect())
+					if(spell.canTargetSelect)
 					{
 						if(SpellbookItem.isEntityTargeted(stack, entity))
 						{

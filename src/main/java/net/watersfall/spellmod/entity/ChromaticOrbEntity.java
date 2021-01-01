@@ -10,7 +10,6 @@ import net.minecraft.world.World;
 import net.watersfall.spellmod.WatersSpellMod;
 import net.watersfall.spellmod.math.Dice;
 import net.watersfall.spellmod.spells.Spells;
-import net.watersfall.spellmod.spells.level1.ChromaticOrbSpell;
 
 public class ChromaticOrbEntity extends ThrownProjectileSpellEntity
 {
@@ -52,9 +51,6 @@ public class ChromaticOrbEntity extends ThrownProjectileSpellEntity
 				DamageSource source;
 				switch(this.variant)
 				{
-					case ChromaticOrbSpell.LIGHTNING:
-						source = DamageSource.LIGHTNING_BOLT;
-						break;
 					default:
 						source = DamageSource.MAGIC;
 				}

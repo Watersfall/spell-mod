@@ -14,6 +14,7 @@ import net.minecraft.entity.player.PlayerInventory;
 import net.minecraft.inventory.Inventories;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
+import net.minecraft.item.ItemUsageContext;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.PacketByteBuf;
 import net.minecraft.screen.ScreenHandler;
@@ -183,9 +184,9 @@ public class SpellbookItem extends Item
 			long[] uuid = new long[]{entity.getUuid().getMostSignificantBits(), entity.getUuid().getLeastSignificantBits()};
 			Spell spell = getActiveSpell(stack).spell;
 			int level = getSpellLevel(stack);
-			if(oldArray.length / 2 >= spell.getMaxTargets(level))
+			if(oldArray.length / 2 >= spell.maxTargets.applyAsInt(stack))
 			{
-				long[] newArray = new long[spell.getMaxTargets(level) * 2];
+				long[] newArray = new long[spell.maxTargets.applyAsInt(stack) * 2];
 				System.arraycopy(oldArray, 2, newArray, 0, newArray.length - 2);
 				newArray[newArray.length - 2] = uuid[0];
 				newArray[newArray.length - 1] = uuid[1];
@@ -303,7 +304,7 @@ public class SpellbookItem extends Item
 					if(spell.item.level <= 0 || getSpellSlots(stack, getSpellLevel(stack) - 1) > 0)
 					{
 						((PlayerEntity) user).getItemCooldownManager().set(stack.getItem(), spell.castingTime);
-						spell.use(stack, world, (PlayerEntity) user);
+						spell.action.use(spell, stack, world, (PlayerEntity) user);
 						if(spell.item.level > 0)
 						{
 							subtractSpellSlot(stack, getSpellLevel(stack) - 1);
@@ -362,8 +363,8 @@ public class SpellbookItem extends Item
 			if(stack.getTag().contains(TagKeys.ACTIVE_SPELL))
 			{
 				Spell spell = Spells.getSpell(stack.getTag().getString(TagKeys.ACTIVE_SPELL));
-				MutableText text = new TranslatableText(spell.translationKey).formatted(Formatting.GRAY, Formatting.ITALIC);
-				if(spell.hasMultipleModes() && stack.getTag().contains(TagKeys.SPELL_VARIANT))
+				MutableText text = new TranslatableText(spell.getTranslationKey()).formatted(Formatting.GRAY, Formatting.ITALIC);
+				if(spell.hasMultipleModes && stack.getTag().contains(TagKeys.SPELL_VARIANT))
 				{
 					text.append(" (").append(new TranslatableText(LangKeys.getSpellVariant(spell, getSpellVariant(stack)))).append(")");
 				}

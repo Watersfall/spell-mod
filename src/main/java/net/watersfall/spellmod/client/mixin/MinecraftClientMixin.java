@@ -44,7 +44,7 @@ public abstract class MinecraftClientMixin
 			if(item != null)
 			{
 				Spell spell = item.spell;
-				if(spell.canTargetSelect())
+				if(spell.canTargetSelect)
 				{
 					if(this.player.isSneaking())
 					{
@@ -60,9 +60,9 @@ public abstract class MinecraftClientMixin
 						}
 						else if(this.crosshairTarget.getType() == HitResult.Type.MISS)
 						{
-							entity = getTargetedEntity(spell.getRange(), this.getTickDelta());
+							entity = getTargetedEntity(spell.range, this.getTickDelta());
 						}
-						if(entity != null && spell.isValidTarget(entity))
+						if(entity != null && spell.isValidTarget.applyAsBoolean(entity))
 						{
 							SpellbookItem.target(player.getMainHandStack(), entity);
 							MinecraftClient.getInstance().getNetworkHandler().sendPacket(Packets.create(player.getMainHandStack(), Hand.MAIN_HAND, WatersSpellMod.TARGET_PACKET_ID));

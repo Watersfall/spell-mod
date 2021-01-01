@@ -20,6 +20,7 @@ import net.minecraft.entity.SpawnGroup;
 import net.minecraft.entity.effect.StatusEffect;
 import net.minecraft.entity.effect.StatusEffectInstance;
 import net.minecraft.entity.effect.StatusEffectType;
+import net.minecraft.entity.mob.MobEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.*;
 import net.minecraft.screen.ScreenHandlerType;
@@ -35,17 +36,10 @@ import net.watersfall.spellmod.effect.ArmorOfAgathysEffect;
 import net.watersfall.spellmod.effect.FriendshipEffect;
 import net.watersfall.spellmod.entity.*;
 import net.watersfall.spellmod.screen.SpellbookScreenHandler;
-import net.watersfall.spellmod.spells.SpellClass;
-import net.watersfall.spellmod.spells.Spells;
+import net.watersfall.spellmod.spells.*;
 import net.watersfall.spellmod.block.BonfireBlock;
 import net.watersfall.spellmod.effect.SpecialStatusEffect;
 import net.watersfall.spellmod.item.SpellbookItem;
-import net.watersfall.spellmod.spells.level0.*;
-import net.watersfall.spellmod.spells.level1.AnimalFriendshipSpell;
-import net.watersfall.spellmod.spells.level1.ArmorOfAgathysSpell;
-import net.watersfall.spellmod.spells.level1.ChromaticOrbSpell;
-import net.watersfall.spellmod.spells.level2.AidSpell;
-import net.watersfall.spellmod.spells.level2.CloudOfDaggersSpell;
 
 import java.awt.*;
 
@@ -82,6 +76,16 @@ public class WatersSpellMod implements ModInitializer
 	public static final StatusEffect AID_STATUS_EFFECT = new AidEffect();
 	public static final ScreenHandlerType<SpellbookScreenHandler> SPELLBOOK_SCREEN_HANDLER;
 	public static final Tag<Item> SPELLBOOK_TAG;
+	public static final Spell BLADE_WARD_SPELL;
+	public static final Spell ACID_SPLASH_SPELL;
+	public static final Spell BOOMING_BLADE_SPELL;
+	public static final Spell CHILL_TOUCH_SPELL;
+	public static final Spell CREATE_BONFIRE_SPELL;
+	public static final Spell ANIMAL_FRIENDSHIP_SPELL;
+	public static final Spell ARMOR_OF_AGATHYS_SPELL;
+	public static final Spell CHROMATIC_ORB_SPELL;
+	public static final Spell AID_SPELL;
+	public static final Spell CLOUD_OF_DAGGERS_SPELL;
 
 	static
 	{
@@ -150,6 +154,26 @@ public class WatersSpellMod implements ModInitializer
 			});
 		}));
 		SPELLBOOK_TAG = TagRegistry.item(getId("spellbooks"));
+		BLADE_WARD_SPELL = Spells.addSpell(getId("blade_ward_spell"),
+				new Spell(new SpellProperties(), SpellAction::BLADE_WARD));
+		ACID_SPLASH_SPELL = Spells.addSpell(getId("acid_splash_spell"),
+				new Spell(new SpellProperties(), SpellAction::ACID_SPLASH));
+		BOOMING_BLADE_SPELL = Spells.addSpell(getId("booming_blade_spell"),
+				new Spell(new SpellProperties(), SpellAction::BOOMING_BLADE));
+		CHILL_TOUCH_SPELL = Spells.addSpell(getId("chill_touch_spell"),
+				new Spell(new SpellProperties().setRange(40D), SpellAction::CHILL_TOUCH));
+		CREATE_BONFIRE_SPELL = Spells.addSpell(getId("create_bonfire_spell"),
+				new Spell(new SpellProperties().setRange(20D), SpellAction::CREATE_BONFIRE));
+		ANIMAL_FRIENDSHIP_SPELL = Spells.addSpell(getId("animal_friendship_spell"),
+				new Spell(new SpellProperties(1).setCanTargetSelect(true).setMaxTargets(SpellbookItem::getSpellLevel).setRange(10D).setIsValidTarget((entity) -> entity instanceof MobEntity), SpellAction::ANIMAL_FRIENDSHIP));
+		ARMOR_OF_AGATHYS_SPELL = Spells.addSpell(getId("armor_of_agathys_spell"),
+				new Spell(new SpellProperties(1), SpellAction::ARMOR_OF_AGATHYS));
+		CHROMATIC_ORB_SPELL = Spells.addSpell(getId("chromatic_orb_spell"),
+				new Spell(new SpellProperties(1).setRange(30D).setHasMultipleModes(true).setModes(SpellModes.Elements.ACID, SpellModes.Elements.COLD, SpellModes.Elements.LIGHTNING, SpellModes.Elements.POISON, SpellModes.Elements.THUNDER), SpellAction::CHROMATIC_ORB));
+		AID_SPELL = Spells.addSpell(getId("aid_spell"),
+				new Spell(new SpellProperties(2).setCanTargetSelect(true).setRange(10D).setMaxTargets((stack) -> 3).setIsValidTarget((entity) -> entity instanceof LivingEntity), SpellAction::AID));
+		CLOUD_OF_DAGGERS_SPELL = Spells.addSpell(getId("cloud_of_daggers_spell"),
+				new Spell(new SpellProperties(2).setRange(20), SpellAction::CLOUD_OF_DAGGERS));
 	}
 
 	public static Identifier getId(String id)
@@ -174,16 +198,6 @@ public class WatersSpellMod implements ModInitializer
 		Registry.register(Registry.ITEM, getId("pedestal"), PEDESTAL_ITEM);
 		Registry.register(Registry.ITEM, getId("c"), new Item(new FabricItemSettings()));
 		Registry.register(Registry.ITEM, getId("s"), new Item(new FabricItemSettings()));
-		Spells.addSpell(getId("blade_ward_spell"), new BladeWardSpell(getId("blade_ward_spell").toString()));
-		Spells.addSpell(getId("acid_splash_spell"), new AcidSplashSpell(getId("acid_splash_spell").toString()));
-		Spells.addSpell(getId("booming_blade_spell"), new BoomingBladeSpell(getId("booming_blade_spell").toString()));
-		Spells.addSpell(getId("chill_touch_spell"), new ChillTouchSpell(getId("chill_touch_spell").toString()));
-		Spells.addSpell(getId("create_bonfire_spell"), new CreateBonfireSpell(getId("create_bonfire_spell").toString()));
-		Spells.addSpell(getId("animal_friendship_spell"), new AnimalFriendshipSpell(getId("animal_friendship_spell").toString()));
-		Spells.addSpell(getId("armor_of_agathys_spell"), new ArmorOfAgathysSpell(getId("armor_of_agathys_spell").toString()));
-		Spells.addSpell(getId("chromatic_orb_spell"), new ChromaticOrbSpell(getId("chromatic_orb_spell").toString()));
-		Spells.addSpell(getId("cloud_of_daggers_spell"), new CloudOfDaggersSpell(getId("cloud_of_daggers_spell").toString()));
-		Spells.addSpell(getId("aid_spell"), new AidSpell(getId("aid_spell").toString()));
 		Registry.register(Registry.STATUS_EFFECT, getId("effect_booming_blade_give"), BOOMING_BLADE_GIVE);
 		Registry.register(Registry.STATUS_EFFECT, getId("effect_booming_blade"), BOOMING_BLADE);
 		Registry.register(Registry.STATUS_EFFECT, getId("effect_chill_of_the_grave"), CHILL_OF_THE_GRAVE);

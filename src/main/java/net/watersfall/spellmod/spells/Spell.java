@@ -2,28 +2,34 @@ package net.watersfall.spellmod.spells;
 
 import net.fabricmc.fabric.api.item.v1.FabricItemSettings;
 import net.minecraft.entity.Entity;
-import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.entity.projectile.ProjectileUtil;
 import net.minecraft.item.ItemStack;
-import net.minecraft.util.TypedActionResult;
+import net.minecraft.util.Identifier;
+import net.minecraft.util.Util;
 import net.minecraft.util.hit.BlockHitResult;
-import net.minecraft.util.hit.HitResult;
-import net.minecraft.util.math.Box;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.RaycastContext;
 import net.minecraft.world.World;
 import net.watersfall.spellmod.WatersSpellMod;
 import net.watersfall.spellmod.item.SpellItem;
+import net.watersfall.spellmod.util.function.ToBooleanFunction;
 
-public abstract class Spell
+import java.util.function.ToIntFunction;
+
+public class Spell
 {
 	public final SpellItem item;
-	public final String id;
-	public final String translationKey;
-	public final int minLevel, maxLevel;
+	public final boolean hasMultipleModes;
+	public final boolean canTargetSelect;
+	public final double range;
+	public final int minLevel;
+	public final int maxLevel;
 	public final int castingTime;
+	public final ToIntFunction<ItemStack> maxTargets;
+	public final ToBooleanFunction<Entity> isValidTarget;
+	public final int[] modes;
+	public final SpellAction action;
 
 	//Same as Item#raycast, but with a range
 	public static BlockHitResult raycast(World world, PlayerEntity player, RaycastContext.FluidHandling fluidHandling, double range) 
@@ -41,50 +47,23 @@ public abstract class Spell
 		return world.raycast(new RaycastContext(vec3d, vec3d2, RaycastContext.ShapeType.OUTLINE, fluidHandling, player));
 	}
 
-	public Spell(String id, int castingTime, int level, int maxLevel)
+	public Spell(SpellProperties properties, SpellAction action)
 	{
-		this.id = id;
-		this.castingTime = castingTime;
-		translationKey = "item." + id.split(":")[0] + "." + id.split(":")[1];
-		item = new SpellItem(new FabricItemSettings().group(WatersSpellMod.SPELL_MOD_GROUP).maxCount(1), this.castingTime, level, this);
-		this.minLevel = level;
-		this.maxLevel = maxLevel;
+		this.hasMultipleModes = properties.hasMultipleModes();
+		this.canTargetSelect = properties.canTargetSelect();
+		this.range = properties.getRange();
+		this.minLevel = properties.getMinLevel();
+		this.maxLevel = properties.getMaxLevel();
+		this.castingTime = properties.getCastingTime();
+		this.maxTargets = properties.getMaxTargets();
+		this.modes = properties.getModes();
+		this.isValidTarget = properties.getIsValidTarget();
+		this.action = action;
+		this.item = new SpellItem(new FabricItemSettings().group(WatersSpellMod.SPELL_MOD_GROUP).maxCount(1), this.castingTime, minLevel, this);
 	}
 
-	public SpellItem getItem()
+	public String getTranslationKey()
 	{
-		return item;
+		return this.item.getTranslationKey();
 	}
-
-	public boolean hasMultipleModes()
-	{
-		return false;
-	}
-
-	public boolean canTargetSelect()
-	{
-		return false;
-	}
-
-	public boolean isValidTarget(Entity entity)
-	{
-		return false;
-	}
-
-	public int getMaxTargets(int level)
-	{
-		return 0;
-	}
-
-	public int[] getModes()
-	{
-		return new int[]{0};
-	}
-
-	public double getRange()
-	{
-		return 0D;
-	}
-
-	public abstract TypedActionResult<ItemStack> use(ItemStack stack, World world, PlayerEntity user);
 }
