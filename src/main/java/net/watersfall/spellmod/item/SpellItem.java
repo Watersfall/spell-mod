@@ -36,6 +36,19 @@ public class SpellItem extends Item
 	public void appendTooltip(ItemStack stack, World world, List<Text> tooltip, TooltipContext context)
 	{
 		super.appendTooltip(stack, world, tooltip, context);
+		if(this.spell.minLevel == 0)
+		{
+			tooltip.add(new TranslatableText("text.waters_spell_mod.cantrip"));
+		}
+		else
+		{
+			tooltip.add(new TranslatableText("text.waters_spell_mod.level").append(new LiteralText(" " + this.spell.minLevel)));
+		}
+		if(this.spell.range > 0D)
+		{
+			tooltip.add(new TranslatableText("text.waters_spell_mod.range").append(new LiteralText(": " + (int)this.spell.range + " ").append(new TranslatableText("text.waters_spell_mod.range_unit"))));
+		}
+		tooltip.add(new TranslatableText("text.waters_spell_mod.casting_time").append(new LiteralText(": " + this.spell.castingTime + " ").append(new TranslatableText("text.waters_spell_mod.casting_time_unit"))));
 		tooltip.add(new TranslatableText("text.waters_spell_mod.spell_classes"));
 		for(int i = 0; i < this.spell.classes.length; i++)
 		{
