@@ -49,6 +49,7 @@ public class WatersSpellMod implements ModInitializer
 
 	public static final Identifier BUTTON_PACKET_ID = getId("button_packet");
 	public static final Identifier SPAWN_PACKET_ID = getId("spawn_packet");
+	public static final Identifier MAGIC_MISSILE_PACKET_ID = getId("magic_missile_packet");
 	public static final Identifier TARGET_PACKET_ID = getId("target");
 	public static final ItemGroup SPELL_MOD_GROUP;
 	public static final SpellbookItem SPELLBOOK_BARD;
@@ -68,6 +69,7 @@ public class WatersSpellMod implements ModInitializer
 	public static final EntityType<ChillTouchEntity> CHILL_TOUCH_ENTITY;
 	public static final EntityType<ChromaticOrbEntity> CHROMATIC_ORB_ENTITY;
 	public static final EntityType<CloudOfDaggersEntity> CLOUD_OF_DAGGERS_ENTITY;
+	public static final EntityType<MagicMissileEntity> MAGIC_MISSILE_ENTITY;
 	public static final StatusEffect BOOMING_BLADE_GIVE = new SpecialStatusEffect(StatusEffectType.BENEFICIAL, Color.YELLOW.hashCode());
 	public static final StatusEffect BOOMING_BLADE = new SpecialStatusEffect(StatusEffectType.HARMFUL, Color.YELLOW.hashCode());
 	public static final StatusEffect CHILL_OF_THE_GRAVE = new SpecialStatusEffect(StatusEffectType.HARMFUL, Color.BLACK.hashCode());
@@ -86,6 +88,7 @@ public class WatersSpellMod implements ModInitializer
 	public static final Spell CHROMATIC_ORB_SPELL;
 	public static final Spell AID_SPELL;
 	public static final Spell CLOUD_OF_DAGGERS_SPELL;
+	public static final Spell MAGIC_MISSILE_SPELL;
 
 	static
 	{
@@ -133,6 +136,15 @@ public class WatersSpellMod implements ModInitializer
 						.trackedUpdateRate(10)
 						.build()
 		);
+		MAGIC_MISSILE_ENTITY = Registry.register(Registry.ENTITY_TYPE,
+				getId("magic_missile_entity"),
+				FabricEntityTypeBuilder.<MagicMissileEntity>create(SpawnGroup.MISC, MagicMissileEntity::new)
+						.dimensions(EntityDimensions.fixed(0.25F, 0.25F))
+						.fireImmune()
+						.trackRangeBlocks(4)
+						.trackedUpdateRate(10)
+						.build()
+		);
 		PEDESTAL_BLOCK = new PedestalBlock(AbstractBlock.Settings.of(Material.STONE));
 		PEDESTAL_ITEM = new BlockItem(PEDESTAL_BLOCK, new FabricItemSettings().group(SPELL_MOD_GROUP));
 		PEDESTAL_BLOCK_ENTITY = Registry.register(Registry.BLOCK_ENTITY_TYPE, getId("pedestal_entity"), BlockEntityType.Builder.create(PedestalBlockEntity::new, PEDESTAL_BLOCK).build(null));
@@ -174,6 +186,8 @@ public class WatersSpellMod implements ModInitializer
 				new Spell(new SpellProperties(2).setCanTargetSelect(true).setRange(10D).setMaxTargets((stack) -> 3).setIsValidTarget((entity) -> entity instanceof LivingEntity).setClasses(SpellClass.CLERIC, SpellClass.PALADIN), SpellAction::AID));
 		CLOUD_OF_DAGGERS_SPELL = Spells.addSpell(getId("cloud_of_daggers_spell"),
 				new Spell(new SpellProperties(2).setRange(20).setClasses(SpellClass.BARD, SpellClass.SORCERER, SpellClass.WARLOCK, SpellClass.WIZARD), SpellAction::CLOUD_OF_DAGGERS));
+		MAGIC_MISSILE_SPELL = Spells.addSpell(getId("magic_missile_spell"),
+				new Spell(new SpellProperties(1).setRange(40D).setClasses(SpellClass.SORCERER, SpellClass.WIZARD).setCanTargetSelect(true).setIsValidTarget((e) -> e instanceof LivingEntity).setMaxTargets((s) -> SpellbookItem.getSpellLevel(s) + 2), SpellAction::MAGIC_MISSILE));
 	}
 
 	public static Identifier getId(String id)

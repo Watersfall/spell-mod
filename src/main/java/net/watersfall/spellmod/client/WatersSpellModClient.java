@@ -18,10 +18,12 @@ import net.minecraft.util.registry.Registry;
 import net.watersfall.spellmod.WatersSpellMod;
 import net.watersfall.spellmod.client.gui.SpellbookGui;
 import net.watersfall.spellmod.client.rendering.CloudOfDaggersEntityRenderer;
+import net.watersfall.spellmod.client.rendering.MagicMissileEntityRenderer;
 import net.watersfall.spellmod.client.rendering.PedestalBlockEntityRenderer;
 import net.watersfall.spellmod.entity.AcidSplashEntity;
 import net.watersfall.spellmod.entity.ChillTouchEntity;
 import net.watersfall.spellmod.entity.ChromaticOrbEntity;
+import net.watersfall.spellmod.entity.MagicMissileEntity;
 import net.watersfall.spellmod.util.Packets;
 
 import java.util.UUID;
@@ -54,6 +56,29 @@ public class WatersSpellModClient implements ClientModInitializer
 				MinecraftClient.getInstance().world.addEntity(entityId, e);
 			});
 		});
+		ClientSidePacketRegistry.INSTANCE.register(WatersSpellMod.MAGIC_MISSILE_PACKET_ID, (ctx, byteBuf) -> {
+			EntityType<?> et = Registry.ENTITY_TYPE.get(byteBuf.readVarInt());
+			UUID uuid = byteBuf.readUuid();
+			int entityId = byteBuf.readVarInt();
+			Vec3d pos = Packets.PacketBufUtil.readVec3d(byteBuf);
+			float pitch = Packets.PacketBufUtil.readAngle(byteBuf);
+			float yaw = Packets.PacketBufUtil.readAngle(byteBuf);
+			UUID target = byteBuf.readUuid();
+			int targetId = byteBuf.readInt();
+
+			ctx.getTaskQueue().execute(() -> {
+				MagicMissileEntity e = (MagicMissileEntity) et.create(MinecraftClient.getInstance().world);
+				e.updateTrackedPosition(pos);
+				e.setPos(pos.x, pos.y, pos.z);
+				e.pitch = pitch;
+				e.yaw = yaw;
+				e.setEntityId(entityId);
+				e.setUuid(uuid);
+				e.target = target;
+				e.targetEntityId = targetId;
+				MinecraftClient.getInstance().world.addEntity(entityId, e);
+			});
+		});
 	}
 
 	@Override
@@ -63,6 +88,7 @@ public class WatersSpellModClient implements ClientModInitializer
 		EntityRendererRegistry.INSTANCE.register(WatersSpellMod.CHILL_TOUCH_ENTITY, (d, c) -> new FlyingItemEntityRenderer<ChillTouchEntity>(d, c.getItemRenderer()));
 		EntityRendererRegistry.INSTANCE.register(WatersSpellMod.CHROMATIC_ORB_ENTITY, (d, c) -> new FlyingItemEntityRenderer<ChromaticOrbEntity>(d, c.getItemRenderer()));
 		EntityRendererRegistry.INSTANCE.register(WatersSpellMod.CLOUD_OF_DAGGERS_ENTITY, (d, c) -> new CloudOfDaggersEntityRenderer(d, c.getItemRenderer()));
+		EntityRendererRegistry.INSTANCE.register(WatersSpellMod.MAGIC_MISSILE_ENTITY, (d, c) -> new MagicMissileEntityRenderer(d, c.getItemRenderer()));
 		BlockRenderLayerMap.INSTANCE.putBlock(WatersSpellMod.BONFIRE_BLOCK, RenderLayer.getCutout());
 		BlockEntityRendererRegistry.INSTANCE.register(WatersSpellMod.PEDESTAL_BLOCK_ENTITY, PedestalBlockEntityRenderer::new);
 		ScreenRegistry.register(WatersSpellMod.SPELLBOOK_SCREEN_HANDLER, SpellbookGui::new);

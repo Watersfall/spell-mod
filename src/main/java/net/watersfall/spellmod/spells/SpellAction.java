@@ -1,6 +1,7 @@
 package net.watersfall.spellmod.spells;
 
 import net.minecraft.block.BlockState;
+import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.effect.StatusEffectInstance;
 import net.minecraft.entity.effect.StatusEffects;
 import net.minecraft.entity.mob.MobEntity;
@@ -14,11 +15,9 @@ import net.minecraft.util.math.Direction;
 import net.minecraft.world.RaycastContext;
 import net.minecraft.world.World;
 import net.watersfall.spellmod.WatersSpellMod;
-import net.watersfall.spellmod.entity.AcidSplashEntity;
-import net.watersfall.spellmod.entity.ChillTouchEntity;
-import net.watersfall.spellmod.entity.ChromaticOrbEntity;
-import net.watersfall.spellmod.entity.CloudOfDaggersEntity;
+import net.watersfall.spellmod.entity.*;
 import net.watersfall.spellmod.item.SpellbookItem;
+import net.watersfall.spellmod.math.Dice;
 
 import java.util.UUID;
 
@@ -172,6 +171,37 @@ public interface SpellAction
 				entity.setPos(x, y, z);
 				entity.updatePosition(x, y, z);
 				world.spawnEntity(entity);
+			}
+		}
+		return TypedActionResult.success(stack, world.isClient);
+	}
+
+	public static TypedActionResult<ItemStack> MAGIC_MISSILE(Spell spell, ItemStack stack, World world, PlayerEntity entity)
+	{
+		if(!world.isClient)
+		{
+			UUID[] uuids = SpellbookItem.getTargets(stack);
+			int e = 0;
+			if(uuids.length > 0)
+			{
+				int damage = Dice.roll(1, 4);
+				for(int i = 0; i < spell.maxTargets.applyAsInt(stack); i++)
+				{
+					LivingEntity target = (LivingEntity)((ServerWorld)world).getEntity(uuids[e]);
+					if(target != null)
+					{
+						MagicMissileEntity missile = new MagicMissileEntity(world, entity, target);
+						missile.setPos(entity.getX(), entity.getEyeY(), entity.getZ());
+						missile.updatePosition(entity.getX(), entity.getEyeY(), entity.getZ());
+						missile.damage = damage;
+						world.spawnEntity(missile);
+						e++;
+						if(e >= uuids.length)
+						{
+							e = 0;
+						}
+					}
+				}
 			}
 		}
 		return TypedActionResult.success(stack, world.isClient);

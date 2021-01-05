@@ -12,6 +12,7 @@ import net.minecraft.util.Identifier;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.util.registry.Registry;
+import net.watersfall.spellmod.entity.MagicMissileEntity;
 
 public class Packets
 {
@@ -23,11 +24,24 @@ public class Packets
 		byteBuf.writeVarInt(Registry.ENTITY_TYPE.getRawId(e.getType()));
 		byteBuf.writeUuid(e.getUuid());
 		byteBuf.writeVarInt(e.getEntityId());
-
 		PacketBufUtil.writeVec3d(byteBuf, e.getPos());
 		PacketBufUtil.writeAngle(byteBuf, e.pitch);
 		PacketBufUtil.writeAngle(byteBuf, e.yaw);
 		return ServerSidePacketRegistry.INSTANCE.toPacket(packetID, byteBuf);
+	}
+
+	public static Packet<?> create(MagicMissileEntity e, Identifier packetId)
+	{
+		PacketByteBuf byteBuf = new PacketByteBuf(Unpooled.buffer());
+		byteBuf.writeVarInt(Registry.ENTITY_TYPE.getRawId(e.getType()));
+		byteBuf.writeUuid(e.getUuid());
+		byteBuf.writeVarInt(e.getEntityId());
+		PacketBufUtil.writeVec3d(byteBuf, e.getPos());
+		PacketBufUtil.writeAngle(byteBuf, e.pitch);
+		PacketBufUtil.writeAngle(byteBuf, e.yaw);
+		byteBuf.writeUuid(e.target);
+		byteBuf.writeInt(e.targetEntityId);
+		return ServerSidePacketRegistry.INSTANCE.toPacket(packetId, byteBuf);
 	}
 
 	public static Packet<?> create(ItemStack stack, Hand hand, Identifier packetId)
